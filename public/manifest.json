@@ -1,0 +1,16 @@
+{
+  "name": "ИскИИ — AI генератор исковых заявлений",
+  "short_name": "ИскИИ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#18181b",
+  "theme_color": "#2563eb",
+  "description": "Бесплатный AI-сервис для создания исковых заявлений онлайн.",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+} 
