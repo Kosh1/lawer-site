@@ -1,6 +1,24 @@
 "use client"
 
+import { useState, useEffect } from "react"
+
 export function AboutSection() {
+  const [documentsCount, setDocumentsCount] = useState(0)
+
+  // Анимация счетчика документов
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDocumentsCount((prev) => {
+        if (prev < 15000) {
+          return prev + 150
+        }
+        return 15000
+      })
+    }, 50)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <section id="about" className="py-20 px-4 bg-gradient-to-r from-indigo-50 to-blue-50">
       <div className="container mx-auto max-w-6xl">
