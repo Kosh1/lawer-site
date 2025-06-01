@@ -76,21 +76,21 @@ export function HeroSection() {
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 {documentsCount.toLocaleString()} созданных исков
               </Badge>
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 Проверено юристами
               </Badge>
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 100% бесплатно
