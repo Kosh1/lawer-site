@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { LAWYER_PROMPT } from "@/lib/prompts"
 
 interface ChatDialogProps {
   isOpen: boolean
@@ -13,11 +14,51 @@ interface ChatDialogProps {
 }
 
 export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps) {
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant', content: string }>>([
-    { role: 'user', content: initialMessage }
-  ])
+  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant', content: string }>>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  // Инициализируем чат с первым сообщением пользователя при открытии диалога
+  React.useEffect(() => {
+    if (isOpen && initialMessage) {
+      setMessages([
+        { role: 'user', content: initialMessage }
+      ])
+      // Автоматически отправляем первое сообщение
+      handleInitialMessage(initialMessage)
+    }
+  }, [isOpen, initialMessage])
+
+  const handleInitialMessage = async (message: string) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [
+            { role: 'system', content: LAWYER_PROMPT },
+            { role: 'user', content: message }
+          ]
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to get response')
+      
+      const data = await response.json()
+      setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
+    } catch (error) {
+      console.error('Error:', error)
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: 'Извините, произошла ошибка. Пожалуйста, попробуйте еще раз.' 
+      }])
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +76,11 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, { role: 'user', content: userMessage }]
+          messages: [
+            { role: 'system', content: LAWYER_PROMPT },
+            ...messages,
+            { role: 'user', content: userMessage }
+          ]
         }),
       })
 
@@ -56,7 +101,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col bg-white border-4 border-red-500">
+      <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Чат с ИИ-юристом</DialogTitle>
         </DialogHeader>
