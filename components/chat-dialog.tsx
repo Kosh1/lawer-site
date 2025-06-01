@@ -101,9 +101,9 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col">
+      <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col bg-white">
         <DialogHeader>
-          <DialogTitle>Чат с ИИ-юристом</DialogTitle>
+          <DialogTitle className="text-gray-900">Чат с ИИ-юристом</DialogTitle>
         </DialogHeader>
         
         <div className="flex-1 overflow-y-auto space-y-4 p-4">
@@ -118,7 +118,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
                 className={`max-w-[80%] rounded-lg p-3 ${
                   message.role === 'user'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-900'
+                    : 'bg-gray-50 text-gray-900 border border-gray-200'
                 }`}
               >
                 {message.content}
@@ -127,16 +127,20 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 border-t">
+        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
           <div className="flex gap-2">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Введите ваше сообщение..."
-              className="flex-1"
+              className="flex-1 bg-white text-gray-900 placeholder:text-gray-500 border-gray-200 focus:border-blue-500"
               disabled={isLoading}
             />
-            <Button type="submit" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+            >
               {isLoading ? "Отправка..." : "Отправить"}
             </Button>
           </div>
