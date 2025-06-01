@@ -74,16 +74,25 @@ export function HeroSection() {
 
             {/* Бейджи доверия */}
             <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <Badge variant="secondary" className="px-4 py-2 text-sm bg-green-100 text-green-800">
-                <CheckCircle className="w-4 h-4 mr-2" />
+              <Badge 
+                variant="secondary" 
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 {documentsCount.toLocaleString()} созданных исков
               </Badge>
-              <Badge variant="secondary" className="px-4 py-2 text-sm bg-blue-100 text-blue-800">
-                <CheckCircle className="w-4 h-4 mr-2" />
+              <Badge 
+                variant="secondary" 
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 Проверено юристами
               </Badge>
-              <Badge variant="secondary" className="px-4 py-2 text-sm bg-purple-100 text-purple-800">
-                <CheckCircle className="w-4 h-4 mr-2" />
+              <Badge 
+                variant="secondary" 
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 100% бесплатно
               </Badge>
             </div>
@@ -103,7 +112,7 @@ export function HeroSection() {
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
                     placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей. Есть справка от управляющей компании и чеки на ремонт..."
-                    className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl"
+                    className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white text-gray-900"
                     required
                     maxLength={2000}
                   />
@@ -149,17 +158,17 @@ export function HeroSection() {
 
           {/* Анимированные метрики */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
-            <div className="text-center p-6 bg-white/50 rounded-xl backdrop-blur-sm">
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
               <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-900">{documentsCount.toLocaleString()}</div>
               <div className="text-sm text-gray-600">созданных документов</div>
             </div>
-            <div className="text-center p-6 bg-white/50 rounded-xl backdrop-blur-sm">
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
               <Clock className="w-8 h-8 text-green-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-900">1 мин 47 сек</div>
               <div className="text-sm text-gray-600">среднее время</div>
             </div>
-            <div className="text-center p-6 bg-white/50 rounded-xl backdrop-blur-sm">
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
               <DollarSign className="w-8 h-8 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-900">от 5,000₽</div>
               <div className="text-sm text-gray-600">экономия на юристе</div>

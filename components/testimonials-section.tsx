@@ -150,21 +150,17 @@ export function TestimonialsSection() {
               </div>
 
               {/* Текст отзыва */}
-              <blockquote className="text-xl text-gray-700 leading-relaxed mb-8 italic">
-                "{testimonials[currentTestimonial].text}"
-              </blockquote>
-
-              {/* Автор */}
-              <div className="flex items-center justify-center space-x-4">
-                <img
-                  src={testimonials[currentTestimonial].avatar || "/placeholder.svg"}
-                  alt={testimonials[currentTestimonial].name}
-                  className="w-12 h-12 rounded-full"
-                />
-                <div className="text-left">
-                  <div className="font-semibold text-gray-900">{testimonials[currentTestimonial].name}</div>
-                  <div className="text-sm text-gray-600">{testimonials[currentTestimonial].city}</div>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-900 font-bold">
+                    {testimonials[currentTestimonial].name[0]}
+                  </div>
+                  <div className="ml-4">
+                    <div className="font-semibold text-gray-900">{testimonials[currentTestimonial].name}</div>
+                    <div className="text-sm text-gray-600">{testimonials[currentTestimonial].city}</div>
+                  </div>
                 </div>
+                <p className="text-gray-900">{testimonials[currentTestimonial].text}</p>
               </div>
 
               {/* Результат */}
