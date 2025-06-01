@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { LAWYER_PROMPT } from '@/lib/prompts'
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing OPENAI_API_KEY environment variable')
@@ -18,10 +19,12 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: "Вы - опытный юрист, который помогает людям составлять исковые заявления. Отвечайте кратко и по существу, используя юридическую терминологию."
+          content: LAWYER_PROMPT
         },
         ...messages
       ],
+      temperature: 0.7,
+      max_tokens: 1000,
     })
 
     return NextResponse.json({ 

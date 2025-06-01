@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { LAWYER_PROMPT } from "@/lib/prompts"
 
 interface Message {
   role: "user" | "assistant"
@@ -61,8 +60,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...messages, newMessage],
-          prompt: LAWYER_PROMPT
+          messages: [...messages, newMessage]
         }),
       })
 
