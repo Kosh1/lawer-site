@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { legalAssistantPrompt } from "@/lib/prompts"
+import { LAWYER_PROMPT } from "@/lib/prompts"
 
 interface Message {
   role: "user" | "assistant"
@@ -62,7 +62,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...messages, newMessage],
-          prompt: legalAssistantPrompt
+          prompt: LAWYER_PROMPT
         }),
       })
 
@@ -88,7 +88,9 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col bg-white">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-gray-900">Юридический ассистент</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-gray-900">
+            Юридический ассистент
+          </DialogTitle>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
