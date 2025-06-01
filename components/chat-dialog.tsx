@@ -64,9 +64,16 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
         }),
       })
 
-      if (!response.ok) throw new Error("Failed to send message")
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to send message')
+      }
 
       const data = await response.json()
+      if (!data.message) {
+        throw new Error('No message in response')
+      }
+
       setMessages((prev) => [...prev, { role: "assistant", content: data.message }])
     } catch (error) {
       console.error("Error sending message:", error)
@@ -74,7 +81,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
         ...prev,
         {
           role: "assistant",
-          content: "Извините, произошла ошибка. Пожалуйста, попробуйте еще раз.",
+          content: "Извините, произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте еще раз.",
         },
       ])
     } finally {
