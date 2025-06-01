@@ -30,11 +30,9 @@ export function CTASection() {
     e.preventDefault()
     if (!agreement || !situation.trim()) return
 
-    console.log('Form submitted:', { agreement, situation })
     setIsLoading(true)
-    // Открываем чат вместо имитации API запроса
+    // Сразу открываем чат
     setIsChatOpen(true)
-    console.log('Chat dialog should open now')
     setIsLoading(false)
   }
 
@@ -71,7 +69,6 @@ export function CTASection() {
                   placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей..."
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                   required
-                  minLength={50}
                   maxLength={2000}
                 />
                 <div className="text-sm text-gray-500 mt-2">{situation.length}/2000 символов</div>
@@ -94,10 +91,10 @@ export function CTASection() {
 
               <Button
                 type="submit"
-                disabled={isLoading || !agreement || situation.length < 50}
+                disabled={isLoading || !agreement || !situation.trim()}
                 className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
               >
-                {isLoading ? "Создаем документ..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ БЕСПЛАТНО"}
+                {isLoading ? "Открываем чат..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ БЕСПЛАТНО"}
               </Button>
             </form>
           </div>
