@@ -5,7 +5,6 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Clock, DollarSign, Users } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
@@ -13,7 +12,6 @@ import { ChatDialog } from "@/components/chat-dialog"
 
 export function HeroSection() {
   const [situation, setSituation] = useState("")
-  const [agreement, setAgreement] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [documentsCount, setDocumentsCount] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -46,7 +44,7 @@ export function HeroSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!agreement || !situation.trim()) return
+    if (!situation.trim()) return
 
     setIsLoading(true)
     // Открываем чат вместо имитации API запроса
@@ -76,21 +74,21 @@ export function HeroSection() {
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm"
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 {documentsCount.toLocaleString()} созданных исков
               </Badge>
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm"
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 Проверено юристами
               </Badge>
               <Badge 
                 variant="secondary" 
-                className="px-4 py-2 text-sm"
+                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
                 100% бесплатно
@@ -114,24 +112,7 @@ export function HeroSection() {
                     placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей. Есть справка от управляющей компании и чеки на ремонт..."
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white text-gray-900"
                     required
-                    maxLength={2000}
                   />
-                  <div className="text-sm text-gray-500 mt-2">{situation.length}/2000 символов</div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="agreement"
-                    checked={agreement}
-                    onCheckedChange={(checked) => setAgreement(checked as boolean)}
-                    className="mt-1"
-                  />
-                  <label htmlFor="agreement" className="text-sm text-gray-600 leading-relaxed">
-                    Я согласен с{" "}
-                    <a href="#" className="text-blue-600 hover:underline">
-                      обработкой персональных данных
-                    </a>
-                  </label>
                 </div>
 
                 <div>
@@ -145,13 +126,18 @@ export function HeroSection() {
                   {file && <div className="text-xs text-gray-500 mt-1">Файл: {file.name}</div>}
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isLoading || !agreement || !situation.trim()}
-                  className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
-                >
-                  {isLoading ? "Открываем чат..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ"}
-                </Button>
+                <div className="space-y-4">
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !situation.trim()}
+                    className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
+                  >
+                    {isLoading ? "Открываем чат..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ"}
+                  </Button>
+                  <p className="text-xs text-gray-500 text-center">
+                    Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
+                  </p>
+                </div>
               </form>
             </div>
           </div>
