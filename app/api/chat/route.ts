@@ -14,7 +14,11 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json()
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not configured")
+    }
+
+    const { messages, sessionId } = await req.json()
 
     if (!Array.isArray(messages)) {
       return NextResponse.json(
@@ -23,16 +27,10 @@ export async function POST(req: Request) {
       )
     }
 
-    // Форматируем сообщения для API
+    // Форматируем сообщения для OpenAI
     const formattedMessages = [
-      {
-        role: "system",
-        content: LAWYER_PROMPT
-      },
-      ...messages.map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }))
+      { role: "system", content: LAWYER_PROMPT },
+      ...messages
     ]
 
     console.log('Sending request to OpenAI with messages:', formattedMessages)
@@ -44,73 +42,62 @@ export async function POST(req: Request) {
       max_tokens: 2000,
     })
 
-    if (!completion.choices[0]?.message?.content) {
-      console.error('No response content from OpenAI')
-      throw new Error('No response from OpenAI')
-    }
+    const assistantMessage = completion.choices[0]?.message?.content || ''
 
-    const assistantMessage = completion.choices[0].message.content
-    const lastUserMessage = messages[messages.length - 1]
+    let currentSessionId = sessionId
 
-    // Создаем новую сессию
-    const newSessionId = uuidv4()
-    
-    try {
-      // Создаем сессию
-      const { error: sessionError } = await supabase
+    // Создаем новую сессию только если её нет
+    if (!currentSessionId) {
+      const { data: session, error: sessionError } = await supabase
         .from('chat_sessions')
-        .insert({
-          id: newSessionId,
-          initial_message: lastUserMessage.content,
-        })
+        .insert([
+          {
+            initial_message: messages[0].content,
+            created_at: new Date().toISOString(),
+          },
+        ])
+        .select()
+        .single()
 
       if (sessionError) {
         console.error('Error creating session:', sessionError)
-        throw sessionError
+      } else {
+        currentSessionId = session.id
       }
+    }
 
-      // Сохраняем сообщения
-      const { error: messagesError } = await supabase
+    // Сохраняем сообщения в базу данных
+    if (currentSessionId) {
+      const { error: messageError } = await supabase
         .from('chat_messages')
         .insert([
           {
-            session_id: newSessionId,
+            session_id: currentSessionId,
             role: 'user',
-            content: lastUserMessage.content,
+            content: messages[messages.length - 1].content,
+            created_at: new Date().toISOString(),
           },
           {
-            session_id: newSessionId,
+            session_id: currentSessionId,
             role: 'assistant',
             content: assistantMessage,
+            created_at: new Date().toISOString(),
           },
         ])
 
-      if (messagesError) {
-        console.error('Error saving messages:', messagesError)
-        throw messagesError
+      if (messageError) {
+        console.error('Error saving messages:', messageError)
       }
-
-      console.log('Successfully saved chat session and messages')
-
-      return NextResponse.json({ 
-        message: assistantMessage,
-        sessionId: newSessionId
-      })
-    } catch (dbError) {
-      console.error('Database error:', dbError)
-      // Даже если сохранение в БД не удалось, возвращаем ответ от GPT
-      return NextResponse.json({ 
-        message: assistantMessage,
-        sessionId: newSessionId
-      })
     }
+
+    return NextResponse.json({ 
+      message: assistantMessage,
+      sessionId: currentSessionId // Возвращаем sessionId клиенту
+    })
   } catch (error) {
     console.error('Error in chat API:', error)
     return NextResponse.json(
-      { 
-        error: 'Internal Server Error', 
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: 'Internal server error', details: error.message },
       { status: 500 }
     )
   }

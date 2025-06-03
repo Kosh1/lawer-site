@@ -22,6 +22,7 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -58,9 +59,12 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          messages: [...messages, newMessage]
+          messages: [...messages, newMessage],
+          sessionId: sessionId
         }),
       })
 
@@ -70,8 +74,13 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
       }
 
       const data = await response.json()
+      
       if (!data.message) {
         throw new Error('No message in response')
+      }
+
+      if (data.sessionId) {
+        setSessionId(data.sessionId)
       }
 
       setMessages((prev) => [...prev, { role: "assistant", content: data.message }])
