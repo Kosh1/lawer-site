@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { LAWYER_PROMPT } from '@/lib/prompts'
+import { supabase } from '@/lib/supabase'
+import { v4 as uuidv4 } from 'uuid'
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing OPENAI_API_KEY environment variable')
@@ -12,7 +14,7 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json()
+    const { messages, sessionId } = await req.json()
 
     if (!Array.isArray(messages)) {
       return NextResponse.json(
@@ -49,8 +51,77 @@ export async function POST(req: Request) {
 
     console.log('Received response from OpenAI:', completion.choices[0].message.content)
 
+    const assistantMessage = completion.choices[0].message.content
+    const lastUserMessage = messages[messages.length - 1]
+    
+    // Если это первое сообщение, создаем новую сессию
+    if (!sessionId) {
+      const newSessionId = uuidv4()
+      
+      // Создаем сессию
+      const { error: sessionError } = await supabase
+        .from('chat_sessions')
+        .insert({
+          id: newSessionId,
+          initial_message: lastUserMessage.content,
+        })
+
+      if (sessionError) {
+        console.error('Error creating session:', sessionError)
+        throw sessionError
+      }
+
+      // Сохраняем сообщения
+      const { error: messagesError } = await supabase
+        .from('chat_messages')
+        .insert([
+          {
+            session_id: newSessionId,
+            role: 'user',
+            content: lastUserMessage.content,
+          },
+          {
+            session_id: newSessionId,
+            role: 'assistant',
+            content: assistantMessage,
+          },
+        ])
+
+      if (messagesError) {
+        console.error('Error saving messages:', messagesError)
+        throw messagesError
+      }
+
+      return NextResponse.json({ 
+        message: assistantMessage,
+        sessionId: newSessionId
+      })
+    }
+
+    // Если сессия уже существует, сохраняем только новые сообщения
+    const { error: messagesError } = await supabase
+      .from('chat_messages')
+      .insert([
+        {
+          session_id: sessionId,
+          role: 'user',
+          content: lastUserMessage.content,
+        },
+        {
+          session_id: sessionId,
+          role: 'assistant',
+          content: assistantMessage,
+        },
+      ])
+
+    if (messagesError) {
+      console.error('Error saving messages:', messagesError)
+      throw messagesError
+    }
+
     return NextResponse.json({ 
-      message: completion.choices[0].message.content 
+      message: assistantMessage,
+      sessionId
     })
   } catch (error) {
     console.error('Detailed error in chat API:', error)
