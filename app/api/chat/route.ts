@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       model: "gpt-4-0125-preview",
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 2000,
     })
 
     if (!completion.choices[0]?.message?.content) {
