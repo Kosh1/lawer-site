@@ -14,7 +14,7 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { messages, sessionId } = await req.json()
+    const { messages } = await req.json()
 
     if (!Array.isArray(messages)) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       model: "gpt-4-0125-preview",
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 5000,
+      max_tokens: 1000,
     })
 
     if (!completion.choices[0]?.message?.content) {
@@ -49,15 +49,13 @@ export async function POST(req: Request) {
       throw new Error('No response from OpenAI')
     }
 
-    console.log('Received response from OpenAI:', completion.choices[0].message.content)
-
     const assistantMessage = completion.choices[0].message.content
     const lastUserMessage = messages[messages.length - 1]
+
+    // Создаем новую сессию
+    const newSessionId = uuidv4()
     
-    // Если это первое сообщение, создаем новую сессию
-    if (!sessionId) {
-      const newSessionId = uuidv4()
-      
+    try {
       // Создаем сессию
       const { error: sessionError } = await supabase
         .from('chat_sessions')
@@ -92,46 +90,26 @@ export async function POST(req: Request) {
         throw messagesError
       }
 
+      console.log('Successfully saved chat session and messages')
+
+      return NextResponse.json({ 
+        message: assistantMessage,
+        sessionId: newSessionId
+      })
+    } catch (dbError) {
+      console.error('Database error:', dbError)
+      // Даже если сохранение в БД не удалось, возвращаем ответ от GPT
       return NextResponse.json({ 
         message: assistantMessage,
         sessionId: newSessionId
       })
     }
-
-    // Если сессия уже существует, сохраняем только новые сообщения
-    const { error: messagesError } = await supabase
-      .from('chat_messages')
-      .insert([
-        {
-          session_id: sessionId,
-          role: 'user',
-          content: lastUserMessage.content,
-        },
-        {
-          session_id: sessionId,
-          role: 'assistant',
-          content: assistantMessage,
-        },
-      ])
-
-    if (messagesError) {
-      console.error('Error saving messages:', messagesError)
-      throw messagesError
-    }
-
-    return NextResponse.json({ 
-      message: assistantMessage,
-      sessionId
-    })
   } catch (error) {
-    console.error('Detailed error in chat API:', error)
-    
-    // Более информативный ответ об ошибке
+    console.error('Error in chat API:', error)
     return NextResponse.json(
       { 
         error: 'Internal Server Error', 
-        details: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString()
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     )
