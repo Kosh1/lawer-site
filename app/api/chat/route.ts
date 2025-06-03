@@ -33,24 +33,35 @@ export async function POST(req: Request) {
       }))
     ]
 
+    console.log('Sending request to OpenAI with messages:', formattedMessages)
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4-0125-preview",
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 5000,
+      max_tokens: 1000,
     })
 
     if (!completion.choices[0]?.message?.content) {
+      console.error('No response content from OpenAI')
       throw new Error('No response from OpenAI')
     }
+
+    console.log('Received response from OpenAI:', completion.choices[0].message.content)
 
     return NextResponse.json({ 
       message: completion.choices[0].message.content 
     })
   } catch (error) {
-    console.error('Error in chat API:', error)
+    console.error('Detailed error in chat API:', error)
+    
+    // Более информативный ответ об ошибке
     return NextResponse.json(
-      { error: 'Internal Server Error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        error: 'Internal Server Error', 
+        details: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     )
   }

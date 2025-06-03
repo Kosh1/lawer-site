@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
@@ -96,6 +96,9 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
           <DialogTitle className="text-xl font-semibold text-gray-900">
             Юридический ассистент
           </DialogTitle>
+          <DialogDescription>
+            Опишите вашу ситуацию, и я помогу составить исковое заявление
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
