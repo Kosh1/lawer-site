@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import { OpenAI } from 'openai'
 import { LAWYER_PROMPT } from '@/lib/prompts'
 import { supabase } from '@/lib/supabase'
 import { v4 as uuidv4 } from 'uuid'
@@ -48,21 +48,21 @@ export async function POST(req: Request) {
 
     // Создаем новую сессию только если её нет
     if (!currentSessionId) {
-      const { data: session, error: sessionError } = await supabase
+      const newSessionId = uuidv4() // Генерируем уникальный ID для сессии
+      const { error: sessionError } = await supabase
         .from('chat_sessions')
         .insert([
           {
+            id: newSessionId, // Используем сгенерированный ID
             initial_message: messages[0].content,
             created_at: new Date().toISOString(),
           },
         ])
-        .select()
-        .single()
 
       if (sessionError) {
         console.error('Error creating session:', sessionError)
       } else {
-        currentSessionId = session.id
+        currentSessionId = newSessionId
       }
     }
 
