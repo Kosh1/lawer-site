@@ -16,7 +16,6 @@ export function HeroSection() {
   const [documentsCount, setDocumentsCount] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [file, setFile] = useState<File | null>(null)
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   // Анимация счетчика документов
@@ -113,17 +112,6 @@ export function HeroSection() {
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white text-gray-900"
                     required
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Загрузите файл (чек, справка, фото):</label>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf,.doc,.docx"
-                    onChange={e => setFile(e.target.files?.[0] || null)}
-                    className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                  {file && <div className="text-xs text-gray-500 mt-1">Файл: {file.name}</div>}
                 </div>
 
                 <div className="space-y-4">
