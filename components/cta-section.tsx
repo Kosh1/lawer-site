@@ -45,11 +45,11 @@ export function CTASection() {
       >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Не откладывайте защиту своих прав</h2>
-            <p className="text-xl text-blue-100 mb-8">Каждый день промедления может стоить вам денег</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Не откладывайте защиту своих прав</h2>
+            <p className="text-xl text-gray-700 mb-8">Каждый день промедления может стоить вам денег</p>
 
             {/* Социальное доказательство */}
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-white">
+            <div className="inline-flex items-center bg-blue-50 backdrop-blur-sm rounded-full px-4 py-2 text-blue-900">
               <Users className="w-4 h-4 mr-2" />
               <span className="text-sm">Прямо сейчас 47 человек создают исковые заявления</span>
             </div>
@@ -67,7 +67,7 @@ export function CTASection() {
                   value={situation}
                   onChange={(e) => setSituation(e.target.value)}
                   placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей..."
-                  className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl"
+                  className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white text-gray-900"
                   required
                   maxLength={2000}
                 />
