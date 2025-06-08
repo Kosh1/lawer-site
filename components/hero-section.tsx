@@ -109,7 +109,7 @@ export function HeroSection() {
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
                     placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей. Есть справка от управляющей компании и чеки на ремонт..."
-                    className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white text-gray-900"
+                    className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
                   />
                 </div>
