@@ -3,27 +3,25 @@ import './globals.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { ScrollToTopButton } from "@/components/scroll-to-top-button"
 
-
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'ИскИИ — AI генератор исковых заявлений',
+  description: 'Бесплатный AI-сервис для создания исковых заявлений онлайн. Защити свои права без юриста!',
   generator: 'v0.dev',
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en">
+    <>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Бесплатный AI-сервис для создания исковых заявлений онлайн. Защити свои права без юриста!" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
-        <title>ИскИИ — AI генератор исковых заявлений</title>
+        {/* Yandex.Metrika counter */}
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{
@@ -47,11 +45,12 @@ export default function RootLayout({
           <div>
             <img
               src="https://mc.yandex.ru/watch/102501372"
-              style={{ position: "absolute", left: "-9999px;" }}
+              style={{ position: "absolute", left: "-9999px" }}
               alt=""
             />
           </div>
         </noscript>
+        {/* /Yandex.Metrika counter */}
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -59,8 +58,6 @@ export default function RootLayout({
           <ScrollToTopButton />
         </ThemeProvider>
       </body>
-    </html>
+    </>
   )
 }
-
-
