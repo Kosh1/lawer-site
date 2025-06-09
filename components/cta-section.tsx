@@ -46,13 +46,13 @@ export function CTASection() {
       >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Не откладывайте защиту своих прав</h2>
-            <p className="text-xl text-gray-700 mb-8">Каждый день промедления может стоить вам денег</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Не позволяйте бывшему супругу уклоняться от ответственности</h2>
+            <p className="text-xl text-gray-700 mb-8">Каждый день без алиментов — это упущенные возможности для ваших детей</p>
 
             {/* Социальное доказательство */}
             <div className="inline-flex items-center bg-blue-50 backdrop-blur-sm rounded-full px-4 py-2 text-blue-900">
               <Users className="w-4 h-4 mr-2" />
-              <span className="text-sm">Прямо сейчас 47 человек создают исковые заявления</span>
+              <span className="text-sm">Прямо сейчас 23 человек создают исковые заявления</span>
             </div>
           </div>
 
@@ -61,13 +61,13 @@ export function CTASection() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="cta-situation" className="block text-lg font-semibold text-gray-900 mb-3">
-                  Расскажите о вашей ситуации:
+                  Расскажите о вашей семейной ситуации:
                 </label>
                 <Textarea
                   id="cta-situation"
                   value={situation}
                   onChange={(e) => setSituation(e.target.value)}
-                  placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей..."
+                  placeholder="Например: Подаю на развод с мужем. У нас общий ребенок 8 лет. Муж работает в компании ООО 'Строй+', получает 80,000 рублей в месяц, но говорит, что будет платить только 5,000. Хочу подать на алименты в размере 25% от зарплаты..."
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-xl bg-white text-gray-900"
                   required
                   maxLength={2000}
@@ -95,7 +95,7 @@ export function CTASection() {
                 disabled={isLoading || !agreement || !situation.trim()}
                 className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
               >
-                {isLoading ? "Открываем чат..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ БЕСПЛАТНО"}
+                {isLoading ? "Открываем чат..." : "ПОЛУЧИТЬ СПРАВЕДЛИВЫЕ АЛИМЕНТЫ"}
               </Button>
             </form>
           </div>

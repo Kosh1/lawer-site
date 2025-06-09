@@ -61,12 +61,12 @@ export function HeroSection() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent leading-tight">
-              Опишите проблему своими словами —<br />
+            Защитите свои права при разводе —<br />
               получите исковое заявление за 2 минуты
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Бесплатно. Без юристов. На основе искусственного интеллекта
+            Никаких судов, встреч с юристами и лишних трат. Просто опишите ситуацию — получите готовый документ для защиты ваших прав и прав детей
             </p>
 
             {/* Бейджи доверия */}
@@ -83,14 +83,14 @@ export function HeroSection() {
                 className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
-                Проверено юристами
+                Экономия до 15,000₽ на юристах
               </Badge>
               <Badge 
                 variant="secondary" 
                 className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
-                100% бесплатно
+                100% конфиденциально — никто не узнает
               </Badge>
             </div>
           </div>
@@ -102,7 +102,7 @@ export function HeroSection() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="situation" className="block text-lg font-semibold text-gray-900 mb-3">
-                    Расскажите о вашей ситуации:
+                    Расскажите о вашей семейной ситуации:
                   </label>
                   <Textarea
                     id="situation"
@@ -120,7 +120,7 @@ export function HeroSection() {
                     disabled={isLoading || !situation.trim()}
                     className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
                   >
-                    {isLoading ? "Открываем чат..." : "СОЗДАТЬ ИСКОВОЕ ЗАЯВЛЕНИЕ"}
+                    {isLoading ? "Открываем чат..." : "ЗАЩИТИТЬ ПРАВА ДЕТЕЙ"}
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
                     Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
@@ -144,7 +144,7 @@ export function HeroSection() {
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
               <DollarSign className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">от 5,000₽</div>
+              <div className="text-2xl font-bold text-gray-900">от 15,000₽</div>
               <div className="text-sm text-gray-600">экономия на юристе</div>
             </div>
           </div>
