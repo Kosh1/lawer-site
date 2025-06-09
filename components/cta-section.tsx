@@ -31,6 +31,11 @@ export function CTASection() {
     e.preventDefault()
     if (!agreement || !situation.trim()) return
 
+    // Яндекс.Метрика — цель "start_dialog"
+    if (typeof window !== "undefined" && (window as any).ym) {
+      (window as any).ym(102501372, "reachGoal", "start_dialog");
+    }
+
     setIsLoading(true)
     // Сразу открываем чат
     setIsChatOpen(true)
@@ -70,9 +75,7 @@ export function CTASection() {
                   placeholder="Например: Подаю на развод с мужем. У нас общий ребенок 8 лет. Муж работает в компании ООО 'Строй+', получает 80,000 рублей в месяц, но говорит, что будет платить только 5,000. Хочу подать на алименты в размере 25% от зарплаты..."
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-xl bg-white text-gray-900"
                   required
-                  maxLength={2000}
                 />
-                <div className="text-sm text-gray-500 mt-2">{situation.length}/2000 символов</div>
               </div>
 
               <div className="flex items-start space-x-3">

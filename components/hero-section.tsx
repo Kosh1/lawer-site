@@ -45,6 +45,11 @@ export function HeroSection() {
     e.preventDefault()
     if (!situation.trim()) return
 
+    // Яндекс.Метрика — цель "start_dialog"
+    if (typeof window !== "undefined" && (window as any).ym) {
+      (window as any).ym(102501372, "reachGoal", "start_dialog");
+    }
+
     setIsLoading(true)
     // Открываем чат вместо имитации API запроса
     setIsChatOpen(true)
