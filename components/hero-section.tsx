@@ -108,7 +108,7 @@ export function HeroSection() {
                     id="situation"
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
-                    placeholder="Например: Сосед сверху залил мою квартиру 15 мая. Ущерб составил 150 тысяч рублей. Есть справка от управляющей компании и чеки на ремонт..."
+                    placeholder="Например: Подаю на развод с мужем. У нас общий ребенок 8 лет. Муж работает в компании ООО 'Строй+', получает 80,000 рублей в месяц, но говорит, что будет платить только 5,000. Хочу подать на алименты в размере 25% от зарплаты..."
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
                   />
