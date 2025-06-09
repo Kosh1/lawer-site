@@ -52,7 +52,7 @@ export function HowItWorks() {
     {
       id: 2,
       icon: Brain,
-      title: "ИИ СОСТАВИТ ЮРИДИЧЕСКИЙ ДОКУМЕНТ,
+      title: "ИИ СОСТАВИТ ЮРИДИЧЕСКИЙ ДОКУМЕНТ",
       description: "Нейросеть создаст исковое заявление с учетом всех нюансов семейного права",
       color: "text-purple-600",
       bgColor: "bg-purple-100",
