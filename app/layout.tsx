@@ -24,7 +24,6 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         <title>ИскИИ — AI генератор исковых заявлений</title>
-        <!-- Yandex.Metrika counter -->
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{
@@ -53,7 +52,6 @@ export default function RootLayout({
             />
           </div>
         </noscript>
-        <!-- /Yandex.Metrika counter -->
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
