@@ -5,11 +5,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight, User, FileText } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function ExamplesSection() {
   const [currentExample, setCurrentExample] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [fullDocumentVisible, setFullDocumentVisible] = useState(false)
 
   const examples = [
     {
@@ -149,7 +151,9 @@ export function ExamplesSection() {
     setCurrentExample((prev) => (prev - 1 + examples.length) % examples.length)
   }
 
-  const example = examples[currentExample]
+  useEffect(() => {
+    setFullDocumentVisible(false);
+  }, [currentExample]);
 
   useEffect(() => {
     const observer = new window.IntersectionObserver(
@@ -159,6 +163,16 @@ export function ExamplesSection() {
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
+
+  const handleToggleFullDocument = () => {
+    setFullDocumentVisible(prev => !prev);
+
+    if (typeof window !== "undefined" && (window as any).ym) {
+      (window as any).ym(102501372, "reachGoal", "view_full_document");
+    }
+  };
+
+  const example = examples[currentExample]
 
   return (
     <section
@@ -217,26 +231,26 @@ export function ExamplesSection() {
             </Card>
 
             {/* Что получил */}
-            <Card className="h-full">
+            <Card className="h-full bg-white text-gray-900 border border-gray-200 shadow transition-all duration-200">
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">
                   <FileText className="w-6 h-6 text-green-600 mr-3" />
                   <h3 className="text-lg font-semibold text-gray-900">Что получил</h3>
                 </div>
-                <div className="bg-white border-2 border-gray-200 rounded-lg p-6 shadow-inner">
-                  <div className="text-center mb-4">
-                    <div className="text-sm text-gray-600 mb-2">{example.result.court}</div>
-                    <h4 className="text-lg font-bold text-gray-900">{example.result.title}</h4>
-                    <div className="text-sm text-gray-600">{example.result.subtitle}</div>
-                  </div>
-                  <div className="border-t pt-4">
-                    <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono">{example.result.preview}</pre>
-                    <div className="text-center mt-4">
-                      <Button variant="outline" size="sm">
-                        Смотреть полный документ
-                      </Button>
-                    </div>
-                  </div>
+                <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                  <p className="font-semibold text-green-800 mb-2">{example.result.court}</p>
+                  <p className="text-gray-800 text-lg font-bold mb-1">{example.result.title}</p>
+                  <p className="text-gray-700 text-sm mb-4">{example.result.subtitle}</p>
+                  <pre className={cn(
+                    "text-gray-700 whitespace-pre-wrap font-sans text-sm leading-relaxed",
+                    { "max-h-40 overflow-hidden": !fullDocumentVisible }
+                  )}>
+                    {example.result.preview}
+                  </pre>
+                  <Button variant="outline" className="mt-4 w-full" onClick={handleToggleFullDocument}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    {fullDocumentVisible ? "Скрыть документ" : "Смотреть полный документ"}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
