@@ -12,7 +12,6 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export function CTASection() {
   const [situation, setSituation] = useState("")
-  const [agreement, setAgreement] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -29,7 +28,7 @@ export function CTASection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!agreement || !situation.trim()) return
+    if (!situation.trim()) return
 
     // Яндекс.Метрика — цель "start_dialog"
     if (typeof window !== "undefined" && (window as any).ym) {
@@ -76,21 +75,6 @@ export function CTASection() {
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-xl bg-white text-gray-900"
                   required
                 />
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <Checkbox
-                  id="cta-agreement"
-                  checked={agreement}
-                  onCheckedChange={(checked) => setAgreement(checked as boolean)}
-                  className="mt-1"
-                />
-                <label htmlFor="cta-agreement" className="text-sm text-gray-600 leading-relaxed">
-                  Я согласен с{" "}
-                  <a href="#" className="text-blue-600 hover:underline">
-                    обработкой персональных данных
-                  </a>
-                </label>
               </div>
 
               <Button
