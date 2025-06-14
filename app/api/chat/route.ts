@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       model: "o4-mini",
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 1000,
     })
 
     const assistantMessage = completion.choices[0]?.message?.content || ''
