@@ -4,6 +4,9 @@ import { Scale } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { LegalModal } from "@/components/LegalModal"
+import PrivacyPolicy from "@/components/legal/PrivacyPolicy"
+import TermsOfService from "@/components/legal/TermsOfService"
+import PublicOffer from "@/components/legal/PublicOffer"
 
 export function Footer() {
   const [modal, setModal] = useState<null | "privacy" | "terms" | "offer">(null)
@@ -67,13 +70,13 @@ export function Footer() {
         </div>
       </div>
       <LegalModal open={modal === "privacy"} onClose={() => setModal(null)} title="Политика конфиденциальности">
-        <p>Здесь будет текст политики конфиденциальности. Lorem ipsum dolor sit amet...</p>
+        <PrivacyPolicy />
       </LegalModal>
       <LegalModal open={modal === "terms"} onClose={() => setModal(null)} title="Пользовательское соглашение">
-        <p>Здесь будет текст пользовательского соглашения. Lorem ipsum dolor sit amet...</p>
+        <TermsOfService />
       </LegalModal>
       <LegalModal open={modal === "offer"} onClose={() => setModal(null)} title="Публичная оферта">
-        <p>Здесь будет текст публичной оферты. Lorem ipsum dolor sit amet...</p>
+        <PublicOffer />
       </LegalModal>
     </footer>
   )
