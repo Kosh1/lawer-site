@@ -79,7 +79,7 @@ export function CTASection() {
 
               <Button
                 type="submit"
-                disabled={isLoading || !agreement || !situation.trim()}
+                disabled={isLoading || !situation.trim()}
                 className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
               >
                 {isLoading ? "Открываем чат..." : "ПОЛУЧИТЬ СПРАВЕДЛИВЫЕ АЛИМЕНТЫ"}
