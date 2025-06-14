@@ -20,7 +20,9 @@ export function LegalModal({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="prose max-w-none">{children}</div>
+        <div className="prose max-w-none max-h-[70vh] overflow-y-auto">
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   )
