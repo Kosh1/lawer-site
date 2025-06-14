@@ -1,7 +1,11 @@
 import { Scale } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { LegalModal } from "@/components/LegalModal"
 
 export function Footer() {
+  const [modal, setModal] = useState<null | "privacy" | "terms" | "offer">(null)
+
   return (
     <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -23,19 +27,19 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Документы</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link href="#" className="hover:text-white transition-colors">
+                <button className="hover:text-white transition-colors underline" onClick={() => setModal("privacy")}>
                   Политика конфиденциальности
-                </Link>
+                </button>
               </li>
               <li>
-                <Link href="#" className="hover:text-white transition-colors">
+                <button className="hover:text-white transition-colors underline" onClick={() => setModal("terms")}>
                   Пользовательское соглашение
-                </Link>
+                </button>
               </li>
               <li>
-                <Link href="#" className="hover:text-white transition-colors">
+                <button className="hover:text-white transition-colors underline" onClick={() => setModal("offer")}>
                   Публичная оферта
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -46,17 +50,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <a href="mailto:help@iskii.ru" className="hover:text-white transition-colors">
-                  help@iskii.ru
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Telegram
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  VK
+                  help@aiisk.ru
                 </a>
               </li>
             </ul>
@@ -70,6 +64,15 @@ export function Footer() {
           </p>
         </div>
       </div>
+      <LegalModal open={modal === "privacy"} onClose={() => setModal(null)} title="Политика конфиденциальности">
+        <p>Здесь будет текст политики конфиденциальности. Lorem ipsum dolor sit amet...</p>
+      </LegalModal>
+      <LegalModal open={modal === "terms"} onClose={() => setModal(null)} title="Пользовательское соглашение">
+        <p>Здесь будет текст пользовательского соглашения. Lorem ipsum dolor sit amet...</p>
+      </LegalModal>
+      <LegalModal open={modal === "offer"} onClose={() => setModal(null)} title="Публичная оферта">
+        <p>Здесь будет текст публичной оферты. Lorem ipsum dolor sit amet...</p>
+      </LegalModal>
     </footer>
   )
 }
