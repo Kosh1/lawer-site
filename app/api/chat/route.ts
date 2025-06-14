@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     console.log('Sending request to OpenAI with messages:', formattedMessages)
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-0125-preview",
+      model: "o4-mini",
       messages: formattedMessages,
       temperature: 0.7,
       max_tokens: 2000,
