@@ -36,10 +36,10 @@ export async function POST(req: Request) {
     console.log('Sending request to OpenAI with messages:', formattedMessages)
 
     const completion = await openai.chat.completions.create({
-      model: "o4-mini",
+      model: "o4-mini-2025-04-16",
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 2000,
     })
 
     const assistantMessage = completion.choices[0]?.message?.content || ''
