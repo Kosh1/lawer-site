@@ -54,8 +54,18 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Контакты</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="mailto:help@iskii.ru" className="hover:text-white transition-colors">
-                  help@aiisk.ru
+                <a href="mailto:tuzovgleb@yandex.ru" className="hover:text-white transition-colors">
+                tuzovgleb@yandex.ru
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/tuzovgleb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Telegram
                 </a>
               </li>
             </ul>
