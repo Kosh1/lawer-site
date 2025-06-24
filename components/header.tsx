@@ -34,27 +34,6 @@ export function Header() {
         isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-transparent"
       }`}
     >
-      <Head>
-        {/* Yandex.Metrika counter */}
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-              m[i].l=1*new Date();
-              for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-              k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-              (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-              ym(102501372, "init", {
-                  clickmap:true,
-                  trackLinks:true,
-                  accurateTrackBounce:true,
-                  webvisor:true
-              });
-            `,
-          }}
-        />
-      </Head>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Scale className="h-8 w-8 text-blue-600" />

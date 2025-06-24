@@ -66,12 +66,12 @@ export function HeroSection() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent leading-tight">
-            Защитите свои права при разводе —<br />
-              получите исковое заявление за 2 минуты
+            Не знаете, как поделить квартиру<br />
+            и защитить права при разводе?
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Никаких судов, встреч с юристами и лишних трат. Просто опишите ситуацию — получите готовый документ для защиты ваших прав и прав детей
+            ИИ-консультант проанализирует ваши права на имущество, алименты и детей за 2 минуты. Бесплатно и конфиденциально.
             </p>
 
             {/* Бейджи доверия */}
@@ -106,14 +106,18 @@ export function HeroSection() {
               {isLoading && <Progress value={80} className="mb-4" />}
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="situation" className="block text-lg font-semibold text-gray-900 mb-3">
-                    Расскажите о вашей семейной ситуации:
-                  </label>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
+                    <span role="img" aria-label="chat" className="mr-2">💬</span>
+                    Расскажите о вашей ситуации
+                  </h2>
+                  <p className="text-base text-gray-600 mb-4">
+                    Опишите простыми словами что происходит. ИИ разберет ваши права и даст конкретный план действий.
+                  </p>
                   <Textarea
                     id="situation"
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
-                    placeholder="Например: Подаю на развод с мужем. У нас общий ребенок 8 лет. Муж работает в компании ООО 'Строй+', получает 80,000 рублей в месяц, но говорит, что будет платить только 5,000. Хочу подать на алименты в размере 25% от зарплаты..."
+                    placeholder="Например: Подаю на развод с мужем. У нас квартира в ипотеке на 2 млн, осталось доплатить 800 тыс. Есть дочь 7 лет. Муж работает программистом, зарплата 120 тысяч, но говорит что будет платить только 10 тысяч алиментов. Боюсь остаться без жилья и денег на ребенка..."
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
                   />
@@ -123,13 +127,29 @@ export function HeroSection() {
                   <Button
                     type="submit"
                     disabled={isLoading || !situation.trim()}
-                    className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
+                    className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 disabled:opacity-50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
-                    {isLoading ? "Открываем чат..." : "ЗАЩИТИТЬ ПРАВА ДЕТЕЙ"}
+                    {isLoading ? "Открываем чат..." : (
+                      <span className="flex items-center justify-center">
+                        <span role="img" aria-label="rocket" className="mr-2">🚀</span>
+                        ПОЛУЧИТЬ ПЛАН ЗАЩИТЫ ПРАВ
+                      </span>
+                    )}
                   </Button>
-                  <p className="text-xs text-gray-500 text-center">
-                    Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
-                  </p>
+                  <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-gray-600 pt-2">
+                    <div className="flex items-center gap-1.5">
+                      <span role="img" aria-label="lock">🔒</span>
+                      <span>100% конфиденциально</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span role="img" aria-label="bolt">⚡</span>
+                      <span>Результат за 2 минуты</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span role="img" aria-label="money with wings">💸</span>
+                      <span>Бесплатно</span>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
