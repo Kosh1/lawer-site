@@ -65,6 +65,12 @@ export function HeroSection() {
       >
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
+            <div className="mb-6 inline-block">
+              <p className="rounded-full bg-indigo-500 px-5 py-2 text-white text-base shadow-md">
+                <span role="img" aria-label="house" className="mr-2">🏡</span>
+                Развод, раздел имущества, алименты, борьба за детей...
+              </p>
+            </div>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent leading-tight">
             Не знаете, как поделить квартиру<br />
             и защитить права при разводе?
