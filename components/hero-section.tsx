@@ -73,31 +73,6 @@ export function HeroSection() {
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             ИИ-консультант проанализирует ваши права на имущество, алименты и детей за 2 минуты. Бесплатно и конфиденциально.
             </p>
-
-            {/* Бейджи доверия */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <Badge 
-                variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
-                {documentsCount.toLocaleString()} созданных исков
-              </Badge>
-              <Badge 
-                variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
-                Экономия до 15,000₽ на юристах
-              </Badge>
-              <Badge 
-                variant="secondary" 
-                className="px-4 py-2 text-sm bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <CheckCircle className="w-4 h-4 mr-2 text-blue-600" />
-                100% конфиденциально — никто не узнает
-              </Badge>
-            </div>
           </div>
 
           {/* Форма генерации */}
