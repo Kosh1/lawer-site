@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Brain, Download } from "lucide-react"
@@ -40,33 +41,6 @@ export function HowItWorks() {
     return () => observer.disconnect()
   }, [])
 
-  const steps = [
-    {
-      id: 1,
-      icon: FileText,
-      title: "ОПИШИТЕ СЕМЕЙНУЮ СИТУАЦИЮ",
-      description: "Расскажите о разводе, детях и доходах супруга простыми словами",
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
-    },
-    {
-      id: 2,
-      icon: Brain,
-      title: "ИИ СОСТАВИТ ЮРИДИЧЕСКИЙ ДОКУМЕНТ",
-      description: "Нейросеть создаст исковое заявление с учетом всех нюансов семейного права",
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
-    },
-    {
-      id: 3,
-      icon: Download,
-      title: "ПОДАЙТЕ ИСК В СУД",
-      description: "Получите готовый документ и защитите права своих детей",
-      color: "text-green-600",
-      bgColor: "bg-green-100",
-    },
-  ]
-
   return (
     <section
       id="how-it-works"
@@ -84,42 +58,91 @@ export function HowItWorks() {
           <div className="hidden md:block absolute top-1/2 left-1/3 w-1/3 h-0.5 bg-gradient-to-r from-blue-300 to-purple-300 transform -translate-y-1/2"></div>
           <div className="hidden md:block absolute top-1/2 right-1/3 w-1/3 h-0.5 bg-gradient-to-r from-purple-300 to-green-300 transform -translate-y-1/2"></div>
 
-          {steps.map((step) => {
-            const Icon = step.icon
-            const isVisible = visibleSteps.includes(step.id)
-
-            return (
-              <Card
-                key={step.id}
-                className={`relative transition-all duration-700 transform ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                } hover:shadow-xl border-2 border-gray-100 hover:border-gray-200`}
-              >
-                <CardContent className="p-8 text-center">
-                  <div
-                    className={`w-16 h-16 ${step.bgColor} rounded-full flex items-center justify-center mx-auto mb-6`}
-                  >
-                    <Icon className={`w-8 h-8 ${step.color}`} />
-                  </div>
-
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 border-gray-200">
-                    <span className="text-sm font-bold text-gray-600">{step.id}</span>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{step.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
-
-                  <div className="mt-4 text-sm text-gray-500">
-                    {step.id === 1 && "~30 секунд"}
-                    {step.id === 2 && "~1 минута"}
-                    {step.id === 3 && "~10 секунд"}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
+          {/* Step 1 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              1
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">РАССКАЖИТЕ ОБ ИМУЩЕСТВЕ</div>
+            <div className="text-gray-500 mb-3">
+              Опишите что есть в семье: квартира, машина, дача, бизнес. Когда и на что покупали — ИИ разберет детали.
+            </div>
+            <div className="text-indigo-600 font-semibold">~30 секунд</div>
+          </div>
+          {/* Step 2 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              2
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">ИИ АНАЛИЗИРУЕТ ПРАВА</div>
+            <div className="text-gray-500 mb-3">
+              Получите экспертное заключение о ваших правах на каждый объект с учетом семейного законодательства
+            </div>
+            <div className="text-indigo-600 font-semibold">~1 минута</div>
+          </div>
+          {/* Step 3 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              3
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">ПЛАН ЗАЩИТЫ ИНТЕРЕСОВ</div>
+            <div className="text-gray-500 mb-3">
+              Стратегия действий + документы при необходимости. Знания вместо страхов и сомнений.
+            </div>
+            <div className="text-indigo-600 font-semibold">~30 секунд</div>
+          </div>
         </div>
       </div>
     </section>
   )
+}
+
+export function HowItWorksSection() {
+  return (
+    <section className="py-20 bg-white">
+      <div className="container mx-auto max-w-5xl px-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+          Как проходит анализ ваших прав
+        </h2>
+        <p className="text-lg text-gray-500 text-center mb-12 max-w-2xl mx-auto">
+          Простой процесс получения ясности о ваших правах на имущество
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {/* Step 1 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              1
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">РАССКАЖИТЕ ОБ ИМУЩЕСТВЕ</div>
+            <div className="text-gray-500 mb-3">
+              Опишите что есть в семье: квартира, машина, дача, бизнес. Когда и на что покупали — ИИ разберет детали.
+            </div>
+            <div className="text-indigo-600 font-semibold">~30 секунд</div>
+          </div>
+          {/* Step 2 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              2
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">ИИ АНАЛИЗИРУЕТ ПРАВА</div>
+            <div className="text-gray-500 mb-3">
+              Получите экспертное заключение о ваших правах на каждый объект с учетом семейного законодательства
+            </div>
+            <div className="text-indigo-600 font-semibold">~1 минута</div>
+          </div>
+          {/* Step 3 */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-3xl font-bold shadow-lg mb-6">
+              3
+            </div>
+            <div className="font-extrabold text-lg text-gray-900 mb-2 uppercase tracking-wide">ПЛАН ЗАЩИТЫ ИНТЕРЕСОВ</div>
+            <div className="text-gray-500 mb-3">
+              Стратегия действий + документы при необходимости. Знания вместо страхов и сомнений.
+            </div>
+            <div className="text-indigo-600 font-semibold">~30 секунд</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

@@ -7,6 +7,8 @@ import { AboutSection } from "@/components/about-section"
 import { CTASection } from "@/components/cta-section"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { HowItWorksSection } from "@/components/how-it-works"
+import { ComparisonSection } from "@/components/comparison-section"
 
 export default function HomePage() {
   return (
@@ -14,7 +16,8 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
-        <HowItWorks />
+        <HowItWorksSection />
+        <ComparisonSection />
         <ExamplesSection />
         <TestimonialsSection />
         <FAQSection />

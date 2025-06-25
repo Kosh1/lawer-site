@@ -74,7 +74,7 @@ export function Header() {
             onClick={() => scrollToSection("hero-form")}
             className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
           >
-            Создать документ
+            Получить консультацию
           </Button>
         </nav>
 
@@ -109,7 +109,7 @@ export function Header() {
                 onClick={() => scrollToSection("hero-form")}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
-                Создать документ
+                Получить консультацию
               </Button>
             </nav>
           </div>
