@@ -1,3 +1,5 @@
+"use client"
+
 import { HeroSection } from "@/components/hero-section"
 import { HowItWorks } from "@/components/how-it-works"
 import { ExamplesSection } from "@/components/examples-section"
