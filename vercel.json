@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/no-contact", "destination": "/?landing=no-contact" },
+    { "source": "/deprive-rights", "destination": "/?landing=deprive-rights" },
+    { "source": "/increase-alimony", "destination": "/?landing=increase-alimony" },
+    { "source": "/divorce", "destination": "/?landing=divorce" },
+    { "source": "/property-split", "destination": "/?landing=property-split" }
+  ]
+} 

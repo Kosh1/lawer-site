@@ -10,7 +10,13 @@ import { CheckCircle, Clock, DollarSign, Users } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { ChatDialog } from "@/components/chat-dialog"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  title: string
+  subtitle: string
+  topText: string
+}
+
+export function HeroSection({ title, subtitle, topText }: HeroSectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [documentsCount, setDocumentsCount] = useState(0)
@@ -67,17 +73,14 @@ export function HeroSection() {
           <div className="text-center mb-12">
             <div className="mb-6 inline-block">
               <p className="rounded-full bg-indigo-500 px-5 py-2 text-white text-base shadow-md">
-                <span role="img" aria-label="house" className="mr-2">🏡</span>
-                Развод, раздел имущества, алименты, борьба за детей...
+                {topText}
               </p>
             </div>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent leading-tight">
-            Не знаете, как поделить квартиру<br />
-            и защитить права при разводе?
+              {title}
             </h1>
-
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            ИИ-консультант проанализирует ваши права на имущество, алименты и детей за 2 минуты. Бесплатно и конфиденциально.
+              {subtitle}
             </p>
           </div>
 
@@ -139,17 +142,17 @@ export function HeroSection() {
           {/* Анимированные метрики */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
             <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-              <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+              <span className="w-8 h-8 text-blue-600 mx-auto mb-2">👥</span>
               <div className="text-2xl font-bold text-gray-900">{documentsCount.toLocaleString()}</div>
               <div className="text-sm text-gray-600">созданных документов</div>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-              <Clock className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <span className="w-8 h-8 text-green-600 mx-auto mb-2">⏱️</span>
               <div className="text-2xl font-bold text-gray-900">1 мин 47 сек</div>
               <div className="text-sm text-gray-600">среднее время</div>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200">
-              <DollarSign className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+              <span className="w-8 h-8 text-purple-600 mx-auto mb-2">💸</span>
               <div className="text-2xl font-bold text-gray-900">от 15,000₽</div>
               <div className="text-sm text-gray-600">экономия на юристе</div>
             </div>
