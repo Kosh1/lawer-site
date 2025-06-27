@@ -50,6 +50,7 @@ export default function LandingPageClient() {
           title={config.title}
           subtitle={config.subtitle}
           topText={config.topText}
+          placeholder={config.placeholder}
         />
         <HowItWorksSection />
         <ComparisonSection />

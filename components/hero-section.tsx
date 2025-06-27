@@ -14,9 +14,10 @@ interface HeroSectionProps {
   title: string
   subtitle: string
   topText: string
+  placeholder: string
 }
 
-export function HeroSection({ title, subtitle, topText }: HeroSectionProps) {
+export function HeroSection({ title, subtitle, topText, placeholder }: HeroSectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [documentsCount, setDocumentsCount] = useState(0)
@@ -101,7 +102,7 @@ export function HeroSection({ title, subtitle, topText }: HeroSectionProps) {
                     id="situation"
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
-                    placeholder="Например: Подаю на развод с мужем. У нас квартира в ипотеке на 2 млн, осталось доплатить 800 тыс. Есть дочь 7 лет. Муж работает программистом, зарплата 120 тысяч, но говорит что будет платить только 10 тысяч алиментов. Боюсь остаться без жилья и денег на ребенка..."
+                    placeholder={placeholder}
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
                   />
