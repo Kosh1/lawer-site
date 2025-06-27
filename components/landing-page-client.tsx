@@ -63,6 +63,7 @@ export default function LandingPageClient() {
           title={config.ctaTitle}
           subtitle={config.ctaSubtitle}
           buttonText={config.ctaButton}
+          placeholder={config.placeholder}
         />
       </main>
       <Footer />

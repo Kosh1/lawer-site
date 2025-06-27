@@ -14,9 +14,10 @@ interface CTASectionProps {
   title: string
   subtitle: string
   buttonText: string
+  placeholder: string
 }
 
-export function CTASection({ title, subtitle, buttonText }: CTASectionProps) {
+export function CTASection({ title, subtitle, buttonText, placeholder }: CTASectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -77,7 +78,7 @@ export function CTASection({ title, subtitle, buttonText }: CTASectionProps) {
                   id="cta-situation"
                   value={situation}
                   onChange={(e) => setSituation(e.target.value)}
-                  placeholder="Например: Подаю на развод с мужем. У нас общий ребенок 8 лет. Муж работает в компании ООО 'Строй+', получает 80,000 рублей в месяц, но говорит, что будет платить только 5,000. Хочу подать на алименты в размере 25% от зарплаты..."
+                  placeholder={placeholder}
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-xl bg-white text-gray-900"
                   required
                 />
