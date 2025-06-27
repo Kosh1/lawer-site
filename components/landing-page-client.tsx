@@ -19,6 +19,7 @@ import { FAQSection } from "@/components/faq-section";
 import { AboutSection } from "@/components/about-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { CTASection } from "@/components/cta-section";
 
 function getLandingConfig(param: string | null): LandingConfig {
   switch (param) {
@@ -58,6 +59,7 @@ export default function LandingPageClient() {
         <TestimonialsSection />
         <FAQSection />
         <AboutSection />
+        <CTASection />
       </main>
       <Footer />
     </>
