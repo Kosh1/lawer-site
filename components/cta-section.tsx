@@ -10,7 +10,13 @@ import { Users } from "lucide-react"
 import { ChatDialog } from "@/components/chat-dialog"
 import { Card, CardContent } from "@/components/ui/card"
 
-export function CTASection() {
+interface CTASectionProps {
+  title: string
+  subtitle: string
+  buttonText: string
+}
+
+export function CTASection({ title, subtitle, buttonText }: CTASectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -50,8 +56,8 @@ export function CTASection() {
       >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Не позволяйте бывшему супругу уклоняться от ответственности</h2>
-            <p className="text-xl text-gray-700 mb-8">Каждый день без алиментов — это упущенные возможности для ваших детей</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
+            <p className="text-xl text-gray-700 mb-8">{subtitle}</p>
 
             {/* Социальное доказательство */}
             <div className="inline-flex items-center bg-blue-50 backdrop-blur-sm rounded-full px-4 py-2 text-blue-900">
@@ -82,7 +88,7 @@ export function CTASection() {
                 disabled={isLoading || !situation.trim()}
                 className="w-full py-4 text-base md:text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 rounded-xl"
               >
-                {isLoading ? "Открываем чат..." : "ПОЛУЧИТЬ СПРАВЕДЛИВЫЕ АЛИМЕНТЫ"}
+                {isLoading ? "Открываем чат..." : buttonText}
               </Button>
             </form>
           </div>

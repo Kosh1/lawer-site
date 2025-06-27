@@ -59,7 +59,11 @@ export default function LandingPageClient() {
         <TestimonialsSection />
         <FAQSection />
         <AboutSection />
-        <CTASection />
+        <CTASection
+          title={config.ctaTitle}
+          subtitle={config.ctaSubtitle}
+          buttonText={config.ctaButton}
+        />
       </main>
       <Footer />
     </>
