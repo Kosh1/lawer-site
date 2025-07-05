@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from 'next'
 import './globals.css'
 import { ScrollToTopButton } from "@/components/scroll-to-top-button"
@@ -53,6 +54,8 @@ export default function RootLayout({
         {/* /Yandex.Metrika counter */}
       </head>
       <body>
+        {children}
+        <ScrollToTopButton />
       </body>
     </>
   )
