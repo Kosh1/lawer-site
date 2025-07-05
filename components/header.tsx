@@ -1,9 +1,12 @@
 "use client"
 
 import { Scale } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export function Header() {
+  const [modal, setModal] = useState<null | "privacy" | "terms" | "offer">(null)
+
   return (
     <header className="w-full bg-white border-b shadow-sm">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -14,17 +17,84 @@ export function Header() {
           </span>
         </div>
         <nav className="flex items-center space-x-6">
-          <Link href="/legal/TermsOfService" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+          <button onClick={() => setModal("terms")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
             Пользовательское соглашение
-          </Link>
-          <Link href="/legal/PrivacyPolicy" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+          </button>
+          <button onClick={() => setModal("privacy")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
             Политика конфиденциальности
-          </Link>
-          <Link href="/legal/PublicOffer" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+          </button>
+          <button onClick={() => setModal("offer")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
             Публичная оферта
-          </Link>
+          </button>
         </nav>
       </div>
+      {/* Модальные окна */}
+      <Dialog open={modal === "terms"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Пользовательское соглашение</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <h2>Пользовательское соглашение</h2>
+            <p>Настоящее Пользовательское соглашение (далее — <strong>Соглашение</strong>) регулирует отношения между разработчиками чат-бота (далее — <strong>Администрация</strong>) и физическим лицом, использующим функционал чат-бота для составления иска о разводе (далее — <strong>Пользователь</strong>).</p>
+            <h3>1. Общие положения</h3>
+            <p>1.1. Используя Сервис, Пользователь подтверждает, что ознакомился и согласен с условиями настоящего Соглашения.</p>
+            <p>1.2. Администрация вправе в любое время изменять Соглашение без предварительного уведомления. Актуальная версия всегда доступна на этой странице.</p>
+            <h3>2. Описание Сервиса</h3>
+            <p>2.1. Сервис представляет собой онлайн-бота, который помогает Пользователю составить проект искового заявления о расторжении брака на основании предоставленных данных.</p>
+            <p>2.2. Сервис не является юридической консультацией, а создан в информационных целях для автоматизации типовых задач.</p>
+            <h3>3. Права и обязанности Пользователя</h3>
+            <p>3.1. Пользователь обязуется предоставлять достоверную информацию для составления иска.</p>
+            <p>3.2. Пользователь несет ответственность за достоверность предоставленных данных.</p>
+            <p>3.3. Пользователь вправе использовать сервис только в личных целях.</p>
+            <h3>4. Ответственность</h3>
+            <p>4.1. Администрация не несет ответственности за последствия использования сгенерированных документов.</p>
+            <p>4.2. Сервис не гарантирует положительный исход дела в суде.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={modal === "privacy"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Политика конфиденциальности</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <h2>Политика конфиденциальности</h2>
+            <p>Настоящая Политика конфиденциальности определяет порядок обработки и защиты персональных данных, предоставляемых Пользователями (далее — <strong>Пользователь</strong>) при использовании чат-бота, предназначенного для помощи в составлении искового заявления о разводе (далее — <strong>Сервис</strong>).</p>
+            <h3>1. Общие положения</h3>
+            <p>1.1. Настоящая Политика разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
+            <p>1.2. Используя Сервис, Пользователь подтверждает согласие с условиями настоящей Политики и даёт согласие на обработку своих персональных данных.</p>
+            <h3>2. Оператор персональных данных</h3>
+            <p>Оператором персональных данных является команда разработчиков Сервиса, действующая в соответствии с законодательством Российской Федерации.</p>
+            <h3>3. Персональные данные, обрабатываемые Сервисом</h3>
+            <p>Сервис может собирать и обрабатывать следующие категории персональных данных: имя, контактные данные, сведения о семейной ситуации, иные данные, необходимые для составления иска.</p>
+            <h3>4. Цели обработки персональных данных</h3>
+            <p>Данные используются исключительно для предоставления услуги по составлению искового заявления.</p>
+            <h3>5. Защита персональных данных</h3>
+            <p>Сервис принимает необходимые меры для защиты персональных данных Пользователей от несанкционированного доступа и распространения.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={modal === "offer"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Публичная оферта</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <h2>Публичная оферта</h2>
+            <p>Настоящая Публичная оферта (далее — <strong>Оферта</strong>) является официальным предложением Администрации любому физическому лицу воспользоваться сервисом для автоматического составления исковых заявлений.</p>
+            <h3>1. Предмет оферты</h3>
+            <p>1.1. Администрация предоставляет Пользователю доступ к сервису для автоматизации составления исковых заявлений.</p>
+            <h3>2. Принятие оферты</h3>
+            <p>2.1. Использование сервиса считается полным и безоговорочным принятием условий настоящей Оферты.</p>
+            <h3>3. Заключительные положения</h3>
+            <p>3.1. Администрация вправе изменять условия Оферты без предварительного уведомления Пользователя.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   )
 }
