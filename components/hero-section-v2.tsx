@@ -25,10 +25,10 @@ export default function HeroSectionV2() {
 
   return (
     <section className="w-full bg-white py-12 md:py-20 border-b mt-0">
-      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10 md:gap-16">
+      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-start gap-10 md:gap-16">
         {/* Левая часть: текст и форма */}
         <div className="flex-1 flex flex-col items-start gap-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight text-left pl-2 md:pl-0">
             Не дают видеться с ребенком?
           </h1>
           <p className="text-lg md:text-2xl font-semibold text-pink-600">
@@ -70,8 +70,8 @@ export default function HeroSectionV2() {
           </div>
         </div>
         {/* Правая часть: сверстанный пример документа */}
-        <div className="flex-1 flex flex-col items-center">
-          <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
+        <div className="flex-1 flex flex-col items-center w-full">
+          <div className="w-full max-w-xl bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
             <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
             <div className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
 {`В ____________________ суд
