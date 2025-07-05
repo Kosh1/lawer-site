@@ -1,7 +1,28 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { ChatDialog } from "@/components/chat-dialog";
 
 export default function HeroSectionV2() {
+  const [input, setInput] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [counter, setCounter] = useState(0);
+
+  // Анимация счетчика до 143
+  useEffect(() => {
+    if (counter < 143) {
+      const timer = setTimeout(() => setCounter(counter + 1), 15);
+      return () => clearTimeout(timer);
+    }
+  }, [counter]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setIsChatOpen(true);
+  };
+
   return (
     <section className="w-full bg-white py-12 md:py-20 border-b">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10 md:gap-16">
@@ -16,14 +37,17 @@ export default function HeroSectionV2() {
           <p className="text-gray-600 text-base md:text-lg">
             Опишите свою ситуацию — получите документ, который поможет восстановить ваши права.
           </p>
-          <form className="w-full flex flex-col gap-4 mt-2">
+          <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
             <textarea
               className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
               placeholder="Бывшая жена не дает видеться с сыном уже два месяца..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
             />
             <button
               type="submit"
-              className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition"
+              className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition disabled:opacity-50"
+              disabled={!input.trim()}
             >
               Составить исковое заявление
             </button>
@@ -40,17 +64,9 @@ export default function HeroSectionV2() {
               </span>
             </div>
           </form>
-          {/* Блок доверия */}
-          <div className="flex items-center gap-4 mt-4">
-            {/* Фото пользователей */}
-            <div className="flex -space-x-2">
-              <Image src="/placeholder-user.jpg" alt="user1" width={40} height={40} className="rounded-full border-2 border-white" />
-              <Image src="/placeholder-user.jpg" alt="user2" width={40} height={40} className="rounded-full border-2 border-white" />
-              <Image src="/placeholder-user.jpg" alt="user3" width={40} height={40} className="rounded-full border-2 border-white" />
-            </div>
-            <span className="text-sm text-gray-700 font-medium">
-              15 000 человек уже воспользовались
-            </span>
+          {/* Счетчик */}
+          <div className="mt-6 text-gray-700 text-sm font-medium">
+            <span className="text-2xl font-bold text-pink-600">{counter}</span> человек воспользовались сегодня
           </div>
         </div>
         {/* Правая часть: сверстанный пример документа */}
@@ -83,6 +99,12 @@ export default function HeroSectionV2() {
           </div>
         </div>
       </div>
+      {/* ChatDialog */}
+      <ChatDialog
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        initialMessage={input}
+      />
     </section>
   );
 } 
