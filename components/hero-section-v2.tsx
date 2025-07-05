@@ -24,7 +24,7 @@ export default function HeroSectionV2() {
   };
 
   return (
-    <section className="w-full bg-white py-12 md:py-20 border-b mt-8">
+    <section className="w-full bg-white py-12 md:py-20 border-b mt-4">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10 md:gap-16">
         {/* Левая часть: текст и форма */}
         <div className="flex-1 flex flex-col items-start gap-6">
