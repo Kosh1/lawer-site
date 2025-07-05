@@ -31,7 +31,7 @@ export default function HeroSectionV2() {
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight text-left">
             Не дают видеться с ребенком?
           </h1>
-          <p className="text-lg md:text-2xl font-semibold text-pink-600">
+          <p className="text-lg md:text-2xl font-semibold text-blue-600">
             Получите готовое исковое заявление бесплатно
           </p>
           <p className="text-gray-600 text-base md:text-lg">
@@ -39,14 +39,14 @@ export default function HeroSectionV2() {
           </p>
           <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
             <textarea
-              className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+              className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder="Бывшая жена не дает видеться с сыном уже два месяца..."
               value={input}
               onChange={e => setInput(e.target.value)}
             />
             <button
               type="submit"
-              className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition disabled:opacity-50"
               disabled={!input.trim()}
             >
               Составить исковое заявление
@@ -66,7 +66,7 @@ export default function HeroSectionV2() {
           </form>
           {/* Счетчик */}
           <div className="mt-6 text-gray-700 text-sm font-medium">
-            <span className="text-2xl font-bold text-pink-600">{counter}</span> человек воспользовались сегодня
+            <span className="text-2xl font-bold text-blue-600">{counter}</span> человек воспользовались сегодня
           </div>
         </div>
         {/* Правая часть: сверстанный пример документа */}
