@@ -27,8 +27,17 @@ export default function HeroSectionV2() {
             >
               Составить исковое заявление
             </button>
-            <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
-              <span role="img" aria-label="lock">🔒</span> 100% конфиденциально
+            {/* Бейджи под кнопкой */}
+            <div className="flex flex-wrap gap-2 mt-2">
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+                <span role="img" aria-label="lock">🔒</span> 100% конфиденциально
+              </span>
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+                <span role="img" aria-label="money">💸</span> Бесплатно
+              </span>
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+                <span role="img" aria-label="clock">⏱️</span> За две минуты
+              </span>
             </div>
           </form>
           {/* Блок доверия */}
@@ -40,26 +49,37 @@ export default function HeroSectionV2() {
               <Image src="/placeholder-user.jpg" alt="user3" width={40} height={40} className="rounded-full border-2 border-white" />
             </div>
             <span className="text-sm text-gray-700 font-medium">
-              15 000 отцов уже воспользовались
+              15 000 человек уже воспользовались
             </span>
-            {/* Бейдж юриста */}
-            <div className="flex items-center gap-1 ml-4 bg-green-50 px-2 py-1 rounded-full border border-green-200">
-              <Image src="/placeholder-user.jpg" alt="lawyer" width={24} height={24} className="rounded-full" />
-              <span className="text-xs text-green-700 font-semibold">Проверено юристом</span>
-            </div>
           </div>
         </div>
-        {/* Правая часть: превью документа */}
+        {/* Правая часть: сверстанный пример документа */}
         <div className="flex-1 flex flex-col items-center">
-          <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-4">
-            <Image
-              src="/placeholder.jpg"
-              alt="Превью искового заявления"
-              width={400}
-              height={500}
-              className="rounded-lg object-contain"
-            />
-            <div className="text-xs text-gray-400 text-center mt-2">Пример готового документа</div>
+          <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
+            <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
+            <div className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
+              {`В ____________________ суд
+от: Иванова Ивана Ивановича
+адрес: 123456, г. Москва, ул. Примерная, д. 1, кв. 1
+
+Ответчик: Петрова Мария Сергеевна
+адрес: 123456, г. Москва, ул. Примерная, д. 2, кв. 2
+
+ИСКОВОЕ ЗАЯВЛЕНИЕ
+о порядке общения с ребенком
+
+С 01.01.2023 года ответчик препятствует моему общению с сыном Ивановым Петром Ивановичем, 2015 г.р., не дает видеться и участвовать в воспитании.
+
+На основании ст. 66 СК РФ прошу:
+1. Установить порядок общения с ребенком: каждую субботу с 10:00 до 18:00, а также половину всех школьных каникул.
+2. Обязать ответчика не препятствовать моему общению с сыном.
+
+Приложения:
+1. Копия свидетельства о рождении ребенка
+2. Копия паспорта истца
+
+Дата: ____________    Подпись: ____________`}
+            </div>
           </div>
         </div>
       </div>
