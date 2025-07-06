@@ -7,7 +7,7 @@ import type { LandingConfig } from "@/lib/landingConfigs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface HeroSectionV2Props {
-  config: LandingConfig;
+  config: LandingConfig & { examplePdf?: string };
 }
 
 export default function HeroSectionV2({ config }: HeroSectionV2Props) {
@@ -82,35 +82,64 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
         <div className="flex-1 flex flex-col items-center w-full">
           <div className="w-full max-w-xl min-w-[400px] bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
             <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
-            <div
-              ref={exampleRef}
-              className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line relative max-h-80 overflow-hidden"
-            >
-              {config.example}
-              {isOverflowing && (
-                <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
-              )}
-            </div>
-            {isOverflowing && (
-              <button
-                className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
-                onClick={() => setShowExampleModal(true)}
-              >
-                Показать полностью
-              </button>
+            {config.examplePdf ? (
+              <>
+                <div className="w-full h-48 md:h-80 flex items-center justify-center bg-white border border-dashed border-gray-300 rounded mb-2">
+                  <span className="text-xs text-gray-500">PDF-пример документа</span>
+                </div>
+                <button
+                  className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
+                  onClick={() => setShowExampleModal(true)}
+                >
+                  Показать полностью
+                </button>
+                <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
+                  <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                      <DialogTitle>Полный пример документа (PDF)</DialogTitle>
+                    </DialogHeader>
+                    <div className="w-full h-[70vh]">
+                      <iframe
+                        src={config.examplePdf}
+                        className="w-full h-full rounded"
+                        title="Пример документа PDF"
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </>
+            ) : (
+              <>
+                <div
+                  ref={exampleRef}
+                  className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line relative max-h-80 overflow-hidden"
+                >
+                  {config.example}
+                  {isOverflowing && (
+                    <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
+                  )}
+                </div>
+                {isOverflowing && (
+                  <button
+                    className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
+                    onClick={() => setShowExampleModal(true)}
+                  >
+                    Показать полностью
+                  </button>
+                )}
+                <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>Полный пример документа</DialogTitle>
+                    </DialogHeader>
+                    <div className="max-h-[70vh] overflow-y-auto text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
+                      {config.example}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </>
             )}
           </div>
-          {/* Модальное окно с полным примером */}
-          <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Полный пример документа</DialogTitle>
-              </DialogHeader>
-              <div className="max-h-[70vh] overflow-y-auto text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
-                {config.example}
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
       {/* ChatDialog */}
