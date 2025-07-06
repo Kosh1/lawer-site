@@ -100,7 +100,7 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
                     </DialogHeader>
                     <div className="w-full h-[70vh]">
                       <iframe
-                        src="/examples/example.pdf"
+                        src={config.examplePdf}
                         className="w-full h-full rounded"
                         title="Пример документа"
                       />
