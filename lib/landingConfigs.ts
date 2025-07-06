@@ -150,7 +150,7 @@ export const noContactConfig: LandingConfig = {
 
 
 Отслеживайте повестку по почте и в системе «ГАС Правосудие».`,
-  examplePdf: "/examples/no-contact-example.pdf"
+  examplePdf: "/examples/no-contact.pdf"
 };
 
 export const depriveRightsConfig: LandingConfig = {
