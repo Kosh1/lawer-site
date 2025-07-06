@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChatDialog } from "@/components/chat-dialog";
 import type { LandingConfig } from "@/lib/landingConfigs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface HeroSectionV2Props {
   config: LandingConfig;
@@ -13,6 +14,10 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [showFull, setShowFull] = useState(false);
+  const [showExampleModal, setShowExampleModal] = useState(false);
+  const exampleRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
   // Анимация счетчика до 143
   useEffect(() => {
@@ -21,6 +26,12 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
       return () => clearTimeout(timer);
     }
   }, [counter]);
+
+  useEffect(() => {
+    if (exampleRef.current) {
+      setIsOverflowing(exampleRef.current.scrollHeight > exampleRef.current.clientHeight);
+    }
+  }, [config.example]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,10 +82,35 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
         <div className="flex-1 flex flex-col items-center w-full">
           <div className="w-full max-w-xl min-w-[400px] bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
             <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
-            <div className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
+            <div
+              ref={exampleRef}
+              className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line relative max-h-80 overflow-hidden"
+            >
               {config.example}
+              {isOverflowing && (
+                <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
+              )}
             </div>
+            {isOverflowing && (
+              <button
+                className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
+                onClick={() => setShowExampleModal(true)}
+              >
+                Показать полностью
+              </button>
+            )}
           </div>
+          {/* Модальное окно с полным примером */}
+          <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Полный пример документа</DialogTitle>
+              </DialogHeader>
+              <div className="max-h-[70vh] overflow-y-auto text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
+                {config.example}
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       {/* ChatDialog */}
