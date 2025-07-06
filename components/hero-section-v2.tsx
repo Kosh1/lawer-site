@@ -3,8 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChatDialog } from "@/components/chat-dialog";
+import type { LandingConfig } from "@/lib/landingConfigs";
 
-export default function HeroSectionV2() {
+interface HeroSectionV2Props {
+  config: LandingConfig;
+}
+
+export default function HeroSectionV2({ config }: HeroSectionV2Props) {
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -29,18 +34,18 @@ export default function HeroSectionV2() {
         {/* Левая часть: текст и форма */}
         <div className="flex-1 flex flex-col items-start gap-6">
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight text-left">
-            Не дают видеться с ребенком?
+            {config.title}
           </h1>
           <p className="text-lg md:text-2xl font-semibold text-blue-600">
-            Получите готовое исковое заявление бесплатно
+            {config.subtitle}
           </p>
           <p className="text-gray-600 text-base md:text-lg">
-            Опишите свою ситуацию — получите документ, который поможет восстановить ваши права.
+            {config.topText}
           </p>
           <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
             <textarea
               className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              placeholder="Бывшая жена не дает видеться с сыном уже два месяца..."
+              placeholder={config.placeholder}
               value={input}
               onChange={e => setInput(e.target.value)}
             />
@@ -49,7 +54,7 @@ export default function HeroSectionV2() {
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition disabled:opacity-50"
               disabled={!input.trim()}
             >
-              Составить исковое заявление
+              {config.ctaButton}
             </button>
             {/* Бейджи под кнопкой */}
             <div className="flex flex-wrap gap-2 mt-2">
@@ -74,27 +79,7 @@ export default function HeroSectionV2() {
           <div className="w-full max-w-xl min-w-[400px] bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
             <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
             <div className="text-left text-xs md:text-sm font-mono text-gray-700 leading-relaxed whitespace-pre-line">
-{`В ____________________ суд
-от: Иванова Ивана Ивановича
-адрес: 123456, г. Москва, ул. Примерная, д. 1, кв. 1
-
-Ответчик: Петрова Мария Сергеевна
-адрес: 123456, г. Москва, ул. Примерная, д. 2, кв. 2
-
-ИСКОВОЕ ЗАЯВЛЕНИЕ
-о порядке общения с ребенком
-
-С 01.01.2023 года ответчик препятствует моему общению с сыном Ивановым Петром Ивановичем, 2015 г.р., не дает видеться и участвовать в воспитании.
-
-На основании ст. 66 СК РФ прошу:
-1. Установить порядок общения с ребенком: каждую субботу с 10:00 до 18:00, а также половину всех школьных каникул.
-2. Обязать ответчика не препятствовать моему общению с сыном.
-
-Приложения:
-1. Копия свидетельства о рождении ребенка
-2. Копия паспорта истца
-
-Дата: ____________    Подпись: ____________`}
+              {config.example}
             </div>
           </div>
         </div>
