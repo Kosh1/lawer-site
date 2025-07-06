@@ -36,22 +36,19 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight text-left">
             {config.title}
           </h1>
-          <p className="text-lg md:text-2xl font-semibold text-blue-600">
+          <p className="text-base md:text-lg font-semibold text-blue-600">
             {config.subtitle}
-          </p>
-          <p className="text-gray-600 text-base md:text-lg">
-            {config.topText}
           </p>
           <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
             <textarea
-              className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder={config.placeholder}
               value={input}
               onChange={e => setInput(e.target.value)}
             />
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-lg shadow-md transition disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-base md:text-lg shadow-md transition disabled:opacity-50"
               disabled={!input.trim()}
             >
               {config.ctaButton}
