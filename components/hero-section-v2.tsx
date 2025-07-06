@@ -96,13 +96,13 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
                 <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
                   <DialogContent className="max-w-3xl">
                     <DialogHeader>
-                      <DialogTitle>Полный пример документа (PDF)</DialogTitle>
+                      <DialogTitle>Полный пример документа</DialogTitle>
                     </DialogHeader>
                     <div className="w-full h-[70vh]">
                       <iframe
-                        src={config.examplePdf}
+                        src="/examples/example.pdf"
                         className="w-full h-full rounded"
-                        title="Пример документа PDF"
+                        title="Пример документа"
                       />
                     </div>
                   </DialogContent>
