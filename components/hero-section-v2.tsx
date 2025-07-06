@@ -33,35 +33,35 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-start gap-10 md:gap-16">
         {/* Левая часть: текст и форма */}
         <div className="flex-1 flex flex-col items-start gap-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight text-left">
+          <h1 className="text-2xl md:text-5xl font-bold text-gray-900 leading-tight text-left">
             {config.title}
           </h1>
-          <p className="text-base md:text-lg font-semibold text-blue-600">
+          <p className="text-sm md:text-base font-semibold text-blue-600">
             {config.subtitle}
           </p>
-          <form className="w-full flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
+          <form className="w-full flex flex-col gap-3 mt-2" onSubmit={handleSubmit}>
             <textarea
-              className="w-full h-20 md:h-24 border border-gray-300 rounded-lg px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full h-16 md:h-24 border border-gray-300 rounded-lg px-3 py-2 text-xs md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder={config.placeholder}
               value={input}
               onChange={e => setInput(e.target.value)}
             />
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-base md:text-lg shadow-md transition disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 md:py-3 rounded-lg text-sm md:text-lg shadow-md transition disabled:opacity-50"
               disabled={!input.trim()}
             >
               {config.ctaButton}
             </button>
             {/* Бейджи под кнопкой */}
             <div className="flex flex-wrap gap-2 mt-2">
-              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium border border-gray-200">
                 <span role="img" aria-label="lock">🔒</span> 100% конфиденциально
               </span>
-              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium border border-gray-200">
                 <span role="img" aria-label="money">💸</span> Бесплатно
               </span>
-              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium border border-gray-200">
+              <span className="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium border border-gray-200">
                 <span role="img" aria-label="clock">⏱️</span> За две минуты
               </span>
             </div>
