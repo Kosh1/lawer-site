@@ -69,10 +69,6 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
               </span>
             </div>
           </form>
-          {/* Счетчик */}
-          <div className="mt-6 text-gray-700 text-sm font-medium">
-            <span className="text-2xl font-bold text-blue-600">{counter}</span> человек воспользовались сегодня
-          </div>
         </div>
         {/* Правая часть: сверстанный пример документа */}
         <div className="flex-1 flex flex-col items-center w-full">
