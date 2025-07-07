@@ -1,120 +1,70 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Scale, Menu, X } from "lucide-react"
-import { useTheme } from 'next-themes'
-import { Sun, Moon } from 'lucide-react'
-import Head from "next/head"
+import { Scale } from "lucide-react"
+import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import PrivacyPolicy from "@/components/legal/PrivacyPolicy"
+import TermsOfService from "@/components/legal/TermsOfService"
+import PublicOffer from "@/components/legal/PublicOffer"
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
-    }
-    setIsMobileMenuOpen(false)
-  }
+  const [modal, setModal] = useState<null | "privacy" | "terms" | "offer">(null)
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+    <header className="w-full bg-white border-b shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="flex items-center space-x-2 mr-8">
           <Scale className="h-8 w-8 text-blue-600" />
           <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             ИскИИ
           </span>
-          {/* Theme toggle */}
-          <button
-            className="ml-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            aria-label="Переключить тему"
-          >
-            {theme === 'dark' ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-gray-700" />}
-          </button>
         </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <button
-            onClick={() => scrollToSection("how-it-works")}
-            className="text-gray-600 hover:text-blue-600 transition-colors"
-          >
-            Как работает
+        <nav className="flex items-center space-x-6">
+          <button onClick={() => setModal("terms")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+            Пользовательское соглашение
           </button>
-          <button
-            onClick={() => scrollToSection("examples")}
-            className="text-gray-600 hover:text-blue-600 transition-colors"
-          >
-            Примеры
+          <button onClick={() => setModal("privacy")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+            Политика конфиденциальности
           </button>
-          <button
-            onClick={() => scrollToSection("testimonials")}
-            className="text-gray-600 hover:text-blue-600 transition-colors"
-          >
-            Отзывы
+          <button onClick={() => setModal("offer")}
+            className="text-gray-600 hover:text-blue-600 text-sm transition-colors">
+            Публичная оферта
           </button>
-          <Button
-            onClick={() => scrollToSection("hero-form")}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-          >
-            Получить консультацию
-          </Button>
         </nav>
-
-        {/* Mobile Menu Button */}
-        <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-white shadow-lg md:hidden">
-            <nav className="flex flex-col p-4 space-y-4">
-              <button
-                onClick={() => scrollToSection("how-it-works")}
-                className="text-left text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                Как работает
-              </button>
-              <button
-                onClick={() => scrollToSection("examples")}
-                className="text-left text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                Примеры
-              </button>
-              <button
-                onClick={() => scrollToSection("testimonials")}
-                className="text-left text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                Отзывы
-              </button>
-              <Button
-                onClick={() => scrollToSection("hero-form")}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-              >
-                Получить консультацию
-              </Button>
-            </nav>
-          </div>
-        )}
       </div>
+      {/* Модальные окна */}
+      <Dialog open={modal === "terms"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Пользовательское соглашение</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <TermsOfService />
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={modal === "privacy"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Политика конфиденциальности</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <PrivacyPolicy />
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={modal === "offer"} onOpenChange={() => setModal(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Публичная оферта</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto text-sm text-gray-800 text-left">
+            <PublicOffer />
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   )
 }

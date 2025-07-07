@@ -20,39 +20,25 @@ import { AboutSection } from "@/components/about-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { CTASection } from "@/components/cta-section";
+import HeroSectionV2 from "@/components/hero-section-v2";
 
-function getLandingConfig(param: string | null): LandingConfig {
-  switch (param) {
-    case "no-contact":
-      return noContactConfig;
-    case "deprive-rights":
-      return depriveRightsConfig;
-    case "increase-alimony":
-      return increaseAlimonyConfig;
-    case "divorce":
-      return divorceConfig;
-    case "property-split":
-      return propertySplitConfig;
-    default:
-      return defaultConfig;
-  }
-}
+const configMap = {
+  "no-contact": noContactConfig,
+  "deprive-rights": depriveRightsConfig,
+  "increase-alimony": increaseAlimonyConfig,
+  "divorce": divorceConfig,
+  "property-split": propertySplitConfig,
+};
 
 export default function LandingPageClient() {
   const searchParams = useSearchParams();
-  const landingParam = searchParams.get("landing");
-  const config = getLandingConfig(landingParam);
+  const landing = searchParams.get("landing");
+  const config = configMap[landing] || defaultConfig;
 
   return (
     <>
-      <Header />
       <main>
-        <HeroSection
-          title={config.title}
-          subtitle={config.subtitle}
-          topText={config.topText}
-          placeholder={config.placeholder}
-        />
+        <HeroSectionV2 config={config} />
         <HowItWorksSection />
         <ComparisonSection />
         <ExamplesSection />

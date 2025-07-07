@@ -1,6 +1,6 @@
+import React from "react";
 import type { Metadata } from 'next'
 import './globals.css'
-import { ThemeProvider } from "@/components/theme-provider"
 import { ScrollToTopButton } from "@/components/scroll-to-top-button"
 
 export const metadata: Metadata = {
@@ -56,10 +56,8 @@ export default function RootLayout({
         {/* /Yandex.Metrika counter */}
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <ScrollToTopButton />
-        </ThemeProvider>
+        {children}
+        <ScrollToTopButton />
       </body>
     </html>
   )
