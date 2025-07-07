@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { verifyCloudPaymentsSignature } from '@/lib/cloudpayments'
-import type { CloudPaymentsCheckRequest, CloudPaymentsPayRequest } from '@/lib/types'
+import type { 
+  CloudPaymentsCheckRequest, 
+  CloudPaymentsPayRequest, 
+  CloudPaymentsFailRequest,
+  CloudPaymentsWebhookData 
+} from '@/lib/types'
 
 export async function POST(req: Request) {
   try {
@@ -21,10 +26,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ code: 13 }, { status: 400 })
     }
 
-    // Парсим данные webhook'а
-    const webhookData: CloudPaymentsCheckRequest | CloudPaymentsPayRequest = JSON.parse(body)
-
-    return NextResponse.json({ code: 16 }, { status: 400 })
+    // Парсим form-encoded данные
+    const formData = new URLSearchParams(body)
+    const webhookData: Record<string, any> = {}
+    
+    for (const [key, value] of formData.entries()) {
+      switch (key) {
+        case 'TransactionId':
+        case 'Amount':
+        case 'PaymentAmount':
+        case 'ReasonCode':
+        case 'ErrorCode':
+          const numValue = parseFloat(value)
+          webhookData[key] = !isNaN(numValue) ? numValue : value
+          break
+        case 'TestMode':
+          webhookData[key] = value.toLowerCase() === 'true' || value === '1'
+          break
+        default:
+          webhookData[key] = value
+      }
+    }
     
     console.log('CloudPayments webhook received:', {
       transactionId: webhookData.TransactionId,
