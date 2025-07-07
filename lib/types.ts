@@ -21,6 +21,8 @@ export interface Payment {
   status: 'pending' | 'succeeded' | 'failed'
   cloudpayments_transaction_id?: number | null
   description?: string | null
+  error_code?: string | null
+  error_message?: string | null
   created_at: string
   updated_at: string
 }
@@ -52,6 +54,10 @@ export interface CloudPaymentsWebhookData {
   CardExpDate?: string
   TestMode: number
   OperationType?: string
+  // Для fail уведомлений
+  ReasonCode?: number
+  ErrorCode?: number
+  Reason?: string
 }
 
 export interface CloudPaymentsCheckRequest {
@@ -73,4 +79,13 @@ export interface CloudPaymentsPayRequest extends CloudPaymentsCheckRequest {
   CardLastFour: string
   CardType: string
   CardExpDate: string
+}
+
+export interface CloudPaymentsFailRequest extends CloudPaymentsCheckRequest {
+  ReasonCode: number
+  ErrorCode?: number
+  Reason: string
+  CardFirstSix?: string
+  CardLastFour?: string
+  CardType?: string
 } 

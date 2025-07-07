@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { verifyCloudPaymentsSignature } from '@/lib/cloudpayments'
-import type { CloudPaymentsCheckRequest, CloudPaymentsPayRequest } from '@/lib/types'
+import type { 
+  CloudPaymentsCheckRequest, 
+  CloudPaymentsPayRequest, 
+  CloudPaymentsFailRequest,
+  CloudPaymentsWebhookData 
+} from '@/lib/types'
 
 export async function POST(req: Request) {
   try {
@@ -21,13 +26,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ code: 13 }, { status: 400 })
     }
 
-    // Парсим данные webhook'а
-    const webhookData: CloudPaymentsCheckRequest | CloudPaymentsPayRequest = JSON.parse(body)
+    // Парсим form-encoded данные
+    const formData = new URLSearchParams(body)
+    const webhookData: Record<string, any> = {}
+    
+    for (const [key, value] of formData.entries()) {
+      switch (key) {
+        case 'TransactionId':
+        case 'Amount':
+        case 'PaymentAmount':
+        case 'ReasonCode':
+        case 'ErrorCode':
+          const numValue = parseFloat(value)
+          webhookData[key] = !isNaN(numValue) ? numValue : value
+          break
+        case 'TestMode':
+          webhookData[key] = value.toLowerCase() === 'true' || value === '1'
+          break
+        default:
+          webhookData[key] = value
+      }
+    }
     
     console.log('CloudPayments webhook received:', {
       transactionId: webhookData.TransactionId,
       invoiceId: webhookData.InvoiceId,
       amount: webhookData.Amount,
+      status: webhookData.Status,
+      operationType: webhookData.OperationType,
       testMode: webhookData.TestMode
     })
 
@@ -49,10 +75,46 @@ export async function POST(req: Request) {
       return NextResponse.json({ code: 11 }, { status: 400 })
     }
 
-    // Определяем тип уведомления по наличию PaymentAmount
-    const isPayNotification = 'PaymentAmount' in webhookData
+    // Определяем тип уведомления
+    const operationType = webhookData.OperationType?.toLowerCase()
+    const status = webhookData.Status?.toLowerCase()
+    
+    if (operationType === 'payment' && status === 'declined') {
+      // Это fail уведомление
+      console.log('Processing fail notification:', {
+        transactionId: webhookData.TransactionId,
+        reasonCode: webhookData.ReasonCode,
+        reason: webhookData.Reason
+      })
 
-    if (isPayNotification) {
+      const errorMessage = `${webhookData.Reason || 'Payment failed'}`
+      if (webhookData.CardType && webhookData.CardFirstSix && webhookData.CardLastFour) {
+        errorMessage += ` | Card: ${webhookData.CardType} ${webhookData.CardFirstSix}****${webhookData.CardLastFour}`
+      }
+
+      const { error: updateError } = await supabase
+        .from('payments')
+        .update({
+          status: 'failed',
+          cloudpayments_transaction_id: webhookData.TransactionId,
+          error_code: webhookData.ReasonCode?.toString() || webhookData.ErrorCode?.toString(),
+          error_message: errorMessage
+        })
+        .eq('id', payment.id)
+
+      if (updateError) {
+        console.error('Error updating payment status to failed:', updateError)
+        return NextResponse.json({ code: 13 }, { status: 500 })
+      }
+
+      console.log('Payment failed:', {
+        paymentId: payment.id,
+        sessionId: payment.session_id,
+        transactionId: webhookData.TransactionId,
+        reason: webhookData.Reason
+      })
+
+    } else if ('PaymentAmount' in webhookData) {
       // Это уведомление об успешной оплате
       const payData = webhookData as CloudPaymentsPayRequest
       
