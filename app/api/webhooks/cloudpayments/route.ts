@@ -79,6 +79,27 @@ export async function POST(req: Request) {
     const operationType = webhookData.OperationType?.toLowerCase()
     const status = webhookData.Status?.toLowerCase()
     
+    // ТЕСТИРОВАНИЕ: Принудительно возвращаем ошибку на check
+    if (!('PaymentAmount' in webhookData) && !status) {
+      // Это check уведомление
+      console.log('Check notification - FORCING ERROR for testing')
+      
+      // Разные коды ошибок для тестирования:
+      // 10 - Отклонен эмитентом
+      // 11 - Ошибка на стороне банка-эквайера  
+      // 12 - Неверная карта
+      // 13 - Недостаточно средств
+      // 14 - Неверный CVV
+      // 15 - Карта заблокирована
+      // 16 - Превышен лимит по карте
+      // 20 - Отклонен по другим причинам
+      
+      return NextResponse.json({ 
+        code: 20, // Недостаточно средств
+        message: "Недостаточно средств на карте (тестовая ошибка)"
+      })
+    }
+    
     if (operationType === 'payment' && status === 'declined') {
       // Это fail уведомление
       console.log('Processing fail notification:', {
@@ -87,7 +108,7 @@ export async function POST(req: Request) {
         reason: webhookData.Reason
       })
 
-      const errorMessage = `${webhookData.Reason || 'Payment failed'}`
+      let errorMessage = `${webhookData.Reason || 'Payment failed'}`
       if (webhookData.CardType && webhookData.CardFirstSix && webhookData.CardLastFour) {
         errorMessage += ` | Card: ${webhookData.CardType} ${webhookData.CardFirstSix}****${webhookData.CardLastFour}`
       }
