@@ -78,6 +78,29 @@ export async function POST(req: Request) {
     } else {
       // Это check уведомление - проверяем возможность платежа
       console.log('Check notification received for payment:', payment.id)
+      
+      // Обновляем статус платежа на failed при возврате ошибки
+      const { error: updateError } = await supabase
+        .from('payments')
+        .update({
+          status: 'failed',
+          cloudpayments_transaction_id: webhookData.TransactionId,
+          error_code: '20',
+          error_message: 'Отклонен по другим причинам (тестовая ошибка check)'
+        })
+        .eq('id', payment.id)
+
+      if (updateError) {
+        console.error('Error updating payment status to failed on check:', updateError)
+        return NextResponse.json({ code: 13 }, { status: 500 })
+      }
+
+      console.log('Payment marked as failed on check:', {
+        paymentId: payment.id,
+        sessionId: payment.session_id,
+        transactionId: webhookData.TransactionId
+      })
+      
       return NextResponse.json({ code: 20 })
     }
 
