@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 
       if (updateError) {
         console.error('Error updating payment status:', updateError)
-        return NextResponse.json({ code: 13 }, { status: 500 })
+        return NextResponse.json({ code: 12 }, { status: 500 })
       }
 
       console.log('Payment succeeded:', {
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
       if (updateError) {
         console.error('Error updating payment status to failed on check:', updateError)
-        return NextResponse.json({ code: 13 }, { status: 500 })
+        return NextResponse.json({ code: 14 }, { status: 500 })
       }
 
       console.log('Payment marked as failed on check:', {
@@ -108,6 +108,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ code: 0 })
   } catch (error) {
     console.error('Error processing CloudPayments webhook:', error)
-    return NextResponse.json({ code: 13 }, { status: 500 })
+    return NextResponse.json({ code: 15 }, { status: 500 })
   }
 } 
