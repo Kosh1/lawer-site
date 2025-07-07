@@ -23,6 +23,8 @@ export async function POST(req: Request) {
 
     // Парсим данные webhook'а
     const webhookData: CloudPaymentsCheckRequest | CloudPaymentsPayRequest = JSON.parse(body)
+
+    return NextResponse.json({ code: 16 }, { status: 400 })
     
     console.log('CloudPayments webhook received:', {
       transactionId: webhookData.TransactionId,
