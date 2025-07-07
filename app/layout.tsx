@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'ИскИИ — AI генератор исковых заявлений',
   description: 'Бесплатный AI-сервис для создания исковых заявлений онлайн. Защити свои права без юриста!',
   generator: 'v0.dev',
+  other: {
+    'mailru-verification': '45b6a8c87ea86dda',
+  },
 }
 
 export default function RootLayout({
@@ -15,11 +18,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
+    <html lang="ru">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="mailru-verification" content="45b6a8c87ea86dda" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         {/* Yandex.Metrika counter */}
@@ -59,6 +61,6 @@ export default function RootLayout({
           <ScrollToTopButton />
         </ThemeProvider>
       </body>
-    </>
+    </html>
   )
 }
