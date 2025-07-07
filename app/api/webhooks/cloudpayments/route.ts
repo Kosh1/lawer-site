@@ -1,12 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { verifyCloudPaymentsSignature } from '@/lib/cloudpayments'
-import type { 
-  CloudPaymentsCheckRequest, 
-  CloudPaymentsPayRequest, 
-  CloudPaymentsFailRequest,
-  CloudPaymentsWebhookData 
-} from '@/lib/types'
+import type { CloudPaymentsCheckRequest, CloudPaymentsPayRequest } from '@/lib/types'
 
 export async function POST(req: Request) {
   try {
@@ -26,34 +21,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ code: 13 }, { status: 400 })
     }
 
-    // Парсим form-encoded данные
-    const formData = new URLSearchParams(body)
-    const webhookData: Record<string, any> = {}
-    
-    for (const [key, value] of formData.entries()) {
-      switch (key) {
-        case 'TransactionId':
-        case 'Amount':
-        case 'PaymentAmount':
-        case 'ReasonCode':
-        case 'ErrorCode':
-          const numValue = parseFloat(value)
-          webhookData[key] = !isNaN(numValue) ? numValue : value
-          break
-        case 'TestMode':
-          webhookData[key] = value.toLowerCase() === 'true' || value === '1'
-          break
-        default:
-          webhookData[key] = value
-      }
-    }
+    // Парсим данные webhook'а
+    const webhookData: CloudPaymentsCheckRequest | CloudPaymentsPayRequest = JSON.parse(body)
     
     console.log('CloudPayments webhook received:', {
       transactionId: webhookData.TransactionId,
       invoiceId: webhookData.InvoiceId,
       amount: webhookData.Amount,
-      status: webhookData.Status,
-      operationType: webhookData.OperationType,
       testMode: webhookData.TestMode
     })
 
@@ -75,67 +49,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ code: 11 }, { status: 400 })
     }
 
-    // Определяем тип уведомления
-    const operationType = webhookData.OperationType?.toLowerCase()
-    const status = webhookData.Status?.toLowerCase()
-    
-    // ТЕСТИРОВАНИЕ: Принудительно возвращаем ошибку на check
-    if (!('PaymentAmount' in webhookData) && !status) {
-      // Это check уведомление
-      console.log('Check notification - FORCING ERROR for testing')
-      
-      // Разные коды ошибок для тестирования:
-      // 10 - Отклонен эмитентом
-      // 11 - Ошибка на стороне банка-эквайера  
-      // 12 - Неверная карта
-      // 13 - Недостаточно средств
-      // 14 - Неверный CVV
-      // 15 - Карта заблокирована
-      // 16 - Превышен лимит по карте
-      // 20 - Отклонен по другим причинам
-      
-      return NextResponse.json({ 
-        code: 20, // Недостаточно средств
-        message: "Недостаточно средств на карте (тестовая ошибка)"
-      })
-    }
-    
-    if (operationType === 'payment' && status === 'declined') {
-      // Это fail уведомление
-      console.log('Processing fail notification:', {
-        transactionId: webhookData.TransactionId,
-        reasonCode: webhookData.ReasonCode,
-        reason: webhookData.Reason
-      })
+    // Определяем тип уведомления по наличию PaymentAmount
+    const isPayNotification = 'PaymentAmount' in webhookData
 
-      let errorMessage = `${webhookData.Reason || 'Payment failed'}`
-      if (webhookData.CardType && webhookData.CardFirstSix && webhookData.CardLastFour) {
-        errorMessage += ` | Card: ${webhookData.CardType} ${webhookData.CardFirstSix}****${webhookData.CardLastFour}`
-      }
-
-      const { error: updateError } = await supabase
-        .from('payments')
-        .update({
-          status: 'failed',
-          cloudpayments_transaction_id: webhookData.TransactionId,
-          error_code: webhookData.ReasonCode?.toString() || webhookData.ErrorCode?.toString(),
-          error_message: errorMessage
-        })
-        .eq('id', payment.id)
-
-      if (updateError) {
-        console.error('Error updating payment status to failed:', updateError)
-        return NextResponse.json({ code: 13 }, { status: 500 })
-      }
-
-      console.log('Payment failed:', {
-        paymentId: payment.id,
-        sessionId: payment.session_id,
-        transactionId: webhookData.TransactionId,
-        reason: webhookData.Reason
-      })
-
-    } else if ('PaymentAmount' in webhookData) {
+    if (isPayNotification) {
       // Это уведомление об успешной оплате
       const payData = webhookData as CloudPaymentsPayRequest
       
@@ -161,6 +78,7 @@ export async function POST(req: Request) {
     } else {
       // Это check уведомление - проверяем возможность платежа
       console.log('Check notification received for payment:', payment.id)
+      return NextResponse.json({ code: 20 })
     }
 
     // Возвращаем код успеха (0)
