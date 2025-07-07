@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase'
 
 export async function GET(
   req: Request,
-  { params }: { params: { paymentId: string } }
+  { params }: { params: Promise<{ paymentId: string }> }
 ) {
   try {
-    const paymentId = params.paymentId
+    const { paymentId } = await params
 
     if (!paymentId) {
       return NextResponse.json(

@@ -41,7 +41,7 @@ export function generatePaymentUrl(paymentId: string): string {
 export function loadCloudPaymentsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
     // Проверяем, если скрипт уже загружен
-    if (typeof window !== 'undefined' && window.cp) {
+    if (typeof window !== 'undefined' && window.cp?.CloudPayments) {
       resolve()
       return
     }
@@ -51,10 +51,35 @@ export function loadCloudPaymentsScript(): Promise<void> {
       return
     }
 
+    // Ждем загрузки скрипта если он уже добавлен в head
+    const existingScript = document.querySelector('script[src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"]')
+    if (existingScript) {
+      // Скрипт уже добавлен, ждем загрузки
+      const checkLoaded = () => {
+        if (window.cp?.CloudPayments) {
+          resolve()
+        } else {
+          setTimeout(checkLoaded, 100)
+        }
+      }
+      checkLoaded()
+      return
+    }
+
+    // Добавляем скрипт динамически, если его нет
     const script = document.createElement('script')
     script.src = 'https://widget.cloudpayments.ru/bundles/cloudpayments.js'
     script.async = true
-    script.onload = () => resolve()
+    script.onload = () => {
+      const checkLoaded = () => {
+        if (window.cp?.CloudPayments) {
+          resolve()
+        } else {
+          setTimeout(checkLoaded, 100)
+        }
+      }
+      checkLoaded()
+    }
     script.onerror = () => reject(new Error('Failed to load CloudPayments script'))
     
     document.head.appendChild(script)
@@ -80,40 +105,76 @@ export interface CloudPaymentsWidgetOptions {
  * Открывает виджет CloudPayments
  */
 export function openCloudPaymentsWidget(options: CloudPaymentsWidgetOptions): void {
-  if (!window.cp) {
+  if (!window.cp?.CloudPayments) {
     throw new Error('CloudPayments script is not loaded')
   }
 
-  const widgetOptions = {
+  // Создаем экземпляр CloudPayments виджета
+  const widget = new window.cp.CloudPayments({ language: 'ru-RU' })
+
+  const paymentOptions = {
     publicId: options.publicId,
     amount: options.amount,
     currency: options.currency,
     invoiceId: options.invoiceId,
     description: options.description,
     requireEmail: options.requireEmail ?? false,
+    skin: "modern" as const,
     data: {
       myProp: 'myProp value'
     },
     configuration: {
       common: {
-        successRedirectUrl: '', // Не используем редирект
-        failRedirectUrl: '', // Не используем редирект
+        successRedirectUrl: '',
+        failRedirectUrl: '',
       }
-    },
-    onSuccess: options.onSuccess,
-    onFail: options.onFail,
-    onComplete: options.onComplete
+    }
   }
 
-  window.cp.CloudPayments.pay('charge', widgetOptions)
+  // Используем charge метод вместо pay
+  widget.charge(
+    paymentOptions,
+    // Callbacks как отдельные аргументы
+    (cpOptions) => {
+      console.log('CloudPayments onSuccess callback:', cpOptions)
+      options.onSuccess?.(cpOptions)
+    },
+    (reason, cpOptions) => {
+      console.error('CloudPayments onFail callback:', reason, cpOptions)
+      options.onFail?.(reason, cpOptions)
+    },
+    (paymentResult, cpOptions) => {
+      console.log('CloudPayments onComplete callback:', paymentResult, cpOptions)
+      options.onComplete?.(paymentResult, cpOptions)
+    }
+  )
 }
 
-// Расширяем глобальный объект Window для TypeScript
+// Обновляем глобальные типы для правильного API
 declare global {
   interface Window {
     cp?: {
-      CloudPayments: {
-        pay: (operation: string, options: any) => void
+      CloudPayments: new (options?: { language?: string }) => {
+        charge: (
+          options: {
+            publicId: string
+            description: string
+            amount: number
+            currency: string
+            accountId?: string
+            invoiceId?: string
+            email?: string
+            skin?: "classic" | "modern" | "mini"
+            requireEmail?: boolean
+            data?: Record<string, any>
+            configuration?: Record<string, any>
+            payer?: Record<string, any>
+            autoClose?: number
+          },
+          onSuccess: (options: any) => void,
+          onFail: (reason: string, options: any) => void,
+          onComplete?: (paymentResult: any, options: any) => void
+        ) => void
       }
     }
   }

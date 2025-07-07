@@ -24,6 +24,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
+        {/* CloudPayments script */}
+        <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js" async />
         {/* Yandex.Metrika counter */}
         <script
           type="text/javascript"
