@@ -215,13 +215,7 @@ export default function StaticPaymentPage() {
             )}
           </Button>
 
-          <div className="text-xs text-gray-500 text-center space-y-1">
-            <p><strong>Тестовые карты для проверки:</strong></p>
-            <p>• Успешная оплата: 4242 4242 4242 4242</p>
-            <p>• Отклонение: 4000 0000 0000 0002</p>
-            <p>• CVV: любой трехзначный код</p>
-            <p>• Срок: любая будущая дата</p>
-          </div>
+
 
           <Button 
             onClick={() => router.push('/')} 
