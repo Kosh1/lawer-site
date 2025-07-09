@@ -7,7 +7,7 @@ import type { LandingConfig } from "@/lib/landingConfigs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface HeroSectionV2Props {
-  config: LandingConfig & { examplePdf?: string };
+  config: LandingConfig & {exampleImages?: string[]; exampleImagesDir?: string };
 }
 
 export default function HeroSectionV2({ config }: HeroSectionV2Props) {
@@ -18,6 +18,8 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
   const [showExampleModal, setShowExampleModal] = useState(false);
   const exampleRef = useRef<HTMLDivElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [currentImageIdx, setCurrentImageIdx] = useState(0);
+  const [images, setImages] = useState<string[]>(config.exampleImages || []);
 
   // Анимация счетчика до 143
   useEffect(() => {
@@ -32,6 +34,24 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
       setIsOverflowing(exampleRef.current.scrollHeight > exampleRef.current.clientHeight);
     }
   }, [config.example]);
+
+  useEffect(() => {
+    if (config.exampleImagesDir) {
+      fetch(`/api/list-images?dir=${config.exampleImagesDir.replace(/^\/+/, "")}`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data.files)) setImages(data.files);
+        });
+    } else if (config.exampleImages) {
+      setImages(config.exampleImages);
+    } else {
+      setImages([]);
+    }
+  }, [config.exampleImagesDir, config.exampleImages]);
+
+  useEffect(() => {
+    setCurrentImageIdx(0); // Сброс при смене примера
+  }, [images]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,10 +102,20 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
         <div className="flex-1 flex flex-col items-center w-full">
           <div className="w-full max-w-xl min-w-[400px] bg-gray-50 border border-gray-200 rounded-xl shadow-sm p-6">
             <div className="text-xs text-gray-400 text-center mb-2">Пример готового документа</div>
-            {config.examplePdf ? (
+            {images && images.length > 0 ? (
               <>
-                <div className="w-full h-48 md:h-80 flex items-center justify-center bg-white border border-dashed border-gray-300 rounded mb-2">
-                  <span className="text-xs text-gray-500">PDF-пример документа</span>
+                <div
+                  className="w-full h-48 md:h-80 flex items-center justify-center bg-white border border-dashed border-gray-300 rounded mb-2 overflow-hidden cursor-pointer"
+                  onClick={() => setShowExampleModal(true)}
+                  style={{ minHeight: '12rem', maxHeight: '20rem' }}
+                >
+                  <Image
+                    src={images[0]}
+                    alt="Страница 1 документа"
+                    width={320}
+                    height={450}
+                    className="object-contain max-h-full max-w-full"
+                  />
                 </div>
                 <button
                   className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
@@ -94,16 +124,37 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
                   Показать полностью
                 </button>
                 <Dialog open={showExampleModal} onOpenChange={setShowExampleModal}>
-                  <DialogContent className="max-w-3xl">
+                  <DialogContent className="max-w-3xl flex flex-col items-center">
                     <DialogHeader>
                       <DialogTitle>Полный пример документа</DialogTitle>
                     </DialogHeader>
-                    <div className="w-full h-[70vh]">
-                      <iframe
-                        src={config.examplePdf}
-                        className="w-full h-full rounded"
-                        title="Пример документа"
-                      />
+                    <div className="w-full flex flex-col items-center">
+                      <div className="relative w-full flex items-center justify-center" style={{ minHeight: '60vh' }}>
+                        <button
+                          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-white"
+                          onClick={() => setCurrentImageIdx(idx => Math.max(0, idx - 1))}
+                          disabled={currentImageIdx === 0}
+                          aria-label="Предыдущая страница"
+                        >
+                          ◀
+                        </button>
+                        <Image
+                          src={images[currentImageIdx]}
+                          alt={`Страница ${currentImageIdx + 1} документа`}
+                          width={400}
+                          height={600}
+                          className="object-contain max-h-[70vh] max-w-full rounded"
+                        />
+                        <button
+                          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-white"
+                          onClick={() => setCurrentImageIdx(idx => Math.min(images.length - 1, idx + 1))}
+                          disabled={currentImageIdx === images.length - 1}
+                          aria-label="Следующая страница"
+                        >
+                          ▶
+                        </button>
+                      </div>
+                      <div className="mt-2 text-xs text-gray-500">Страница {currentImageIdx + 1} из {images.length}</div>
                     </div>
                   </DialogContent>
                 </Dialog>
