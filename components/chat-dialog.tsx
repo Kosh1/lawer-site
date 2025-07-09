@@ -132,7 +132,20 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
                   {message.role === "user" ? "Вы" : "Юридический ассистент"}
                 </div>
                 <div className="text-gray-700 whitespace-pre-wrap">
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                  <ReactMarkdown
+                    components={{
+                      a: ({node, ...props}) => (
+                        <a
+                          {...props}
+                          className="text-blue-600 underline hover:text-blue-800 transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        />
+                      ),
+                    }}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             </div>
