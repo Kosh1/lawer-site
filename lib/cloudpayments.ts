@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 
 export const PAYMENT_CONFIG = {
-  amount: 1000, // 1000 рублей - захардкоженная сумма
+  amount: 500, // 500 рублей - захардкоженная сумма
   currency: 'RUB',
   description: 'Юридическая консультация',
 } as const
