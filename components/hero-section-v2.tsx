@@ -105,17 +105,18 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
             {images && images.length > 0 ? (
               <>
                 <div
-                  className="w-full h-48 md:h-80 flex items-center justify-center bg-white border border-dashed border-gray-300 rounded mb-2 overflow-hidden cursor-pointer"
+                  className="w-full h-48 md:h-80 flex items-center justify-center bg-white border border-dashed border-gray-300 rounded mb-2 overflow-hidden cursor-pointer relative"
                   onClick={() => setShowExampleModal(true)}
                   style={{ minHeight: '12rem', maxHeight: '20rem' }}
                 >
                   <Image
                     src={images[0]}
                     alt="Страница 1 документа"
-                    width={320}
-                    height={450}
-                    className="object-contain max-h-full max-w-full"
+                    fill
+                    className="object-cover w-full h-full"
+                    style={{ position: 'absolute', inset: 0 }}
                   />
+                  <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
                 </div>
                 <button
                   className="mt-2 text-blue-600 hover:underline text-xs font-semibold"
@@ -138,13 +139,15 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
                         >
                           ◀
                         </button>
-                        <Image
-                          src={images[currentImageIdx]}
-                          alt={`Страница ${currentImageIdx + 1} документа`}
-                          width={400}
-                          height={600}
-                          className="object-contain max-h-[70vh] max-w-full rounded"
-                        />
+                        <div className="w-full max-h-[70vh] overflow-y-auto flex items-center justify-center">
+                          <Image
+                            src={images[currentImageIdx]}
+                            alt={`Страница ${currentImageIdx + 1} документа`}
+                            width={800}
+                            height={1200}
+                            className="w-full object-cover"
+                          />
+                        </div>
                         <button
                           className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-white"
                           onClick={() => setCurrentImageIdx(idx => Math.min(images.length - 1, idx + 1))}
