@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   role: "user" | "assistant"
@@ -130,7 +131,9 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
                 <div className="text-sm font-medium text-gray-900 mb-1">
                   {message.role === "user" ? "Вы" : "Юридический ассистент"}
                 </div>
-                <div className="text-gray-700 whitespace-pre-wrap">{message.content}</div>
+                <div className="text-gray-700 whitespace-pre-wrap">
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                </div>
               </div>
             </div>
           ))}
