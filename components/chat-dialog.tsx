@@ -134,14 +134,27 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
                 <div className="text-gray-700 whitespace-pre-wrap">
                   <ReactMarkdown
                     components={{
-                      a: ({node, ...props}) => (
-                        <a
-                          {...props}
-                          className="text-blue-600 underline hover:text-blue-800 transition-colors"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        />
-                      ),
+                      a: ({node, ...props}) => {
+                        // Отправка события в Яндекс.Метрику при показе ссылки на /pay
+                        useEffect(() => {
+                          if (
+                            typeof window !== 'undefined' &&
+                            (window as any).ym &&
+                            typeof props.href === 'string' &&
+                            props.href.includes('/pay')
+                          ) {
+                            (window as any).ym(102501372, 'reachGoal', 'show_pay_link');
+                          }
+                        }, [props.href]);
+                        return (
+                          <a
+                            {...props}
+                            className="text-blue-600 underline hover:text-blue-800 transition-colors"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          />
+                        );
+                      },
                     }}
                   >
                     {message.content}
