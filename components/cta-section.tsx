@@ -78,6 +78,11 @@ export function CTASection({ title, subtitle, buttonText, placeholder }: CTASect
                   id="cta-situation"
                   value={situation}
                   onChange={(e) => setSituation(e.target.value)}
+                  onFocus={() => {
+                    if (typeof window !== "undefined" && (window as any).ym) {
+                      (window as any).ym(102501372, "reachGoal", "focus_message_input");
+                    }
+                  }}
                   placeholder={placeholder}
                   className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-xl bg-white text-gray-900"
                   required

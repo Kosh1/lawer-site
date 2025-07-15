@@ -56,6 +56,12 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
+
+    // Яндекс.Метрика — цель "start_dialog"
+    if (typeof window !== "undefined" && (window as any).ym) {
+      (window as any).ym(102501372, "reachGoal", "start_dialog");
+    }
+
     setIsChatOpen(true);
   };
 
@@ -76,6 +82,11 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
               placeholder={config.placeholder}
               value={input}
               onChange={e => setInput(e.target.value)}
+              onFocus={() => {
+                if (typeof window !== "undefined" && (window as any).ym) {
+                  (window as any).ym(102501372, "reachGoal", "focus_message_input");
+                }
+              }}
             />
             <button
               type="submit"
