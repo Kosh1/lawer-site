@@ -27,42 +27,62 @@ export async function POST(req: Request) {
       )
     }
 
+    // --- Описание функции для function calling ---
+    const functions = [
+      {
+        name: "save_phone",
+        description: "Сохраняет номер телефона и время для звонка юриста",
+        parameters: {
+          type: "object",
+          properties: {
+            phone: { type: "string", description: "Номер телефона пользователя" },
+            call_time: { type: "string", description: "Удобное время для звонка" }
+          },
+          required: ["phone", "call_time"]
+        }
+      }
+    ];
+
     // Форматируем сообщения для OpenAI
     const formattedMessages = [
       { role: "system", content: LAWYER_PROMPT },
       ...messages
-    ]
+    ];
 
     console.log('Sending request to OpenAI with messages:', formattedMessages)
 
+    // --- Вызов OpenAI с поддержкой function_call ---
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1",
+      model: "gpt-4-1106-preview", // GPT-4 с поддержкой function calling
       messages: formattedMessages,
       temperature: 0.7,
       max_tokens: 2000,
-    })
+      functions,
+      function_call: "auto"
+    });
 
-    const assistantMessage = completion.choices[0]?.message?.content || ''
+    const choice = completion.choices[0];
+    let assistantMessage = choice.message?.content || '';
+    let functionCall = choice.message?.function_call;
 
-    let currentSessionId = sessionId
+    let currentSessionId = sessionId;
 
     // Создаем новую сессию только если её нет
     if (!currentSessionId) {
-      const newSessionId = uuidv4() // Генерируем уникальный ID для сессии
+      const newSessionId = uuidv4();
       const { error: sessionError } = await supabase
         .from('chat_sessions')
         .insert([
           {
-            id: newSessionId, // Используем сгенерированный ID
+            id: newSessionId,
             initial_message: messages[0].content,
             created_at: new Date().toISOString(),
           },
-        ])
-
+        ]);
       if (sessionError) {
-        console.error('Error creating session:', sessionError)
+        console.error('Error creating session:', sessionError);
       } else {
-        currentSessionId = newSessionId
+        currentSessionId = newSessionId;
       }
     }
 
@@ -83,11 +103,46 @@ export async function POST(req: Request) {
             content: assistantMessage,
             created_at: new Date().toISOString(),
           },
-        ])
-
+        ]);
       if (messageError) {
-        console.error('Error saving messages:', messageError)
+        console.error('Error saving messages:', messageError);
       }
+
+      // --- Обработка function_call save_phone ---
+      if (functionCall && functionCall.name === "save_phone") {
+        try {
+          const args = JSON.parse(functionCall.arguments || '{}');
+          if (args.phone && args.call_time) {
+            // Проверяем, нет ли уже такой заявки для этой сессии
+            const { data: existing, error: selectError } = await supabase
+              .from('call_requests')
+              .select('id')
+              .eq('session_id', currentSessionId)
+              .eq('phone', args.phone)
+              .eq('call_time', args.call_time)
+              .maybeSingle();
+            if (!existing && !selectError) {
+              const { error: callError } = await supabase
+                .from('call_requests')
+                .insert([
+                  {
+                    id: uuidv4(),
+                    session_id: currentSessionId,
+                    phone: args.phone,
+                    call_time: args.call_time,
+                    created_at: new Date().toISOString(),
+                  },
+                ]);
+              if (callError) {
+                console.error('Error saving call request:', callError);
+              }
+            }
+          }
+        } catch (e) {
+          console.error('Error parsing function_call arguments:', e);
+        }
+      }
+      // --- конец блока ---
     }
 
     return NextResponse.json({ 

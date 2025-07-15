@@ -88,4 +88,13 @@ export interface CloudPaymentsFailRequest extends CloudPaymentsCheckRequest {
   CardFirstSix?: string
   CardLastFour?: string
   CardType?: string
+}
+
+// Тип для заявки на звонок с юристом
+export interface CallRequest {
+  id: string
+  session_id: string
+  phone: string
+  call_time: string
+  created_at: string
 } 
