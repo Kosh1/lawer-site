@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
     // --- Вызов OpenAI с поддержкой function_call ---
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-1106-preview", // GPT-4 с поддержкой function calling
+      model: "gpt-4.1", 
       messages: formattedMessages,
       temperature: 0.7,
       max_tokens: 2000,
@@ -145,9 +145,14 @@ export async function POST(req: Request) {
       // --- конец блока ---
     }
 
+    // Если ассистент не вернул текст, но был вызван function_call — верните свой текст
+    if (!assistantMessage && functionCall && functionCall.name === "save_phone") {
+      assistantMessage = "Спасибо! Я записал ваш номер телефона и время для звонка. Юрист свяжется с вами в указанное время.";
+    }
+
     return NextResponse.json({ 
       message: assistantMessage,
-      sessionId: currentSessionId // Возвращаем sessionId клиенту
+      sessionId: currentSessionId
     })
   } catch (error) {
     console.error('Error in chat API:', error)
