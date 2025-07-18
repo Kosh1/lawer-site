@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             phone: { type: "string", description: "Номер телефона пользователя" },
             call_time: { type: "string", description: "Удобное время для звонка" }
           },
-          required: ["phone", "call_time"]
+          required: ["phone"]
         }
       }
     ];
