@@ -35,8 +35,7 @@ export async function POST(req: Request) {
         parameters: {
           type: "object",
           properties: {
-            phone: { type: "string", description: "Номер телефона пользователя" },
-            call_time: { type: "string", description: "Удобное время для звонка" }
+            phone: { type: "string", description: "Номер телефона пользователя" }
           },
           required: ["phone"]
         }
@@ -112,14 +111,13 @@ export async function POST(req: Request) {
       if (functionCall && functionCall.name === "save_phone") {
         try {
           const args = JSON.parse(functionCall.arguments || '{}');
-          if (args.phone && args.call_time) {
+          if (args.phone) {
             // Проверяем, нет ли уже такой заявки для этой сессии
             const { data: existing, error: selectError } = await supabase
               .from('call_requests')
               .select('id')
               .eq('session_id', currentSessionId)
               .eq('phone', args.phone)
-              .eq('call_time', args.call_time)
               .maybeSingle();
             if (!existing && !selectError) {
               const { error: callError } = await supabase
@@ -129,7 +127,6 @@ export async function POST(req: Request) {
                     id: uuidv4(),
                     session_id: currentSessionId,
                     phone: args.phone,
-                    call_time: args.call_time,
                     created_at: new Date().toISOString(),
                   },
                 ]);
