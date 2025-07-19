@@ -3,6 +3,7 @@ import { OpenAI } from 'openai'
 import { LAWYER_PROMPT } from '@/lib/prompts'
 import { supabase } from '@/lib/supabase'
 import { v4 as uuidv4 } from 'uuid'
+import { cookies } from 'next/headers'
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing OPENAI_API_KEY environment variable')
@@ -14,6 +15,15 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
+    // --- userId через cookie ---
+    const cookieStore = await cookies();
+    let userId = cookieStore.get('userId')?.value;
+    let setUserIdCookie = false;
+    if (!userId) {
+      userId = uuidv4();
+      setUserIdCookie = true;
+    }
+
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not configured")
     }
@@ -74,6 +84,7 @@ export async function POST(req: Request) {
         .insert([
           {
             id: newSessionId,
+            user_id: userId, // сохраняем userId
             initial_message: messages[0].content,
             created_at: new Date().toISOString(),
             utm: utm || null,
@@ -150,8 +161,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ 
       message: assistantMessage,
-      sessionId: currentSessionId
-    })
+      sessionId: currentSessionId,
+      userId // возвращаем userId для фронта (если нужно)
+    }, setUserIdCookie ? {
+      headers: {
+        'Set-Cookie': `userId=${userId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`
+      }
+    } : undefined)
   } catch (error) {
     console.error('Error in chat API:', error)
     return NextResponse.json(
