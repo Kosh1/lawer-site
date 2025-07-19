@@ -15,9 +15,10 @@ interface CTASectionProps {
   subtitle: string
   buttonText: string
   placeholder: string
+  utm?: Record<string, string>
 }
 
-export function CTASection({ title, subtitle, buttonText, placeholder }: CTASectionProps) {
+export function CTASection({ title, subtitle, buttonText, placeholder, utm }: CTASectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -105,6 +106,7 @@ export function CTASection({ title, subtitle, buttonText, placeholder }: CTASect
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
         initialMessage={situation}
+        utm={utm}
       />
     </>
   )

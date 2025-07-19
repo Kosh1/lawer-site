@@ -17,9 +17,10 @@ interface ChatDialogProps {
   isOpen: boolean
   onClose: () => void
   initialMessage?: string
+  utm?: Record<string, string>
 }
 
-export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps) {
+export function ChatDialog({ isOpen, onClose, initialMessage, utm }: ChatDialogProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -58,15 +59,20 @@ export function ChatDialog({ isOpen, onClose, initialMessage }: ChatDialogProps)
     setIsLoading(true)
 
     try {
+      const body: any = {
+        messages: [...messages, newMessage],
+        sessionId: sessionId
+      };
+      // Если сессии нет, добавляем utm
+      if (!sessionId && utm) {
+        body.utm = utm;
+      }
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          messages: [...messages, newMessage],
-          sessionId: sessionId
-        }),
+        body: JSON.stringify(body),
       })
 
       if (!response.ok) {

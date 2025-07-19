@@ -35,10 +35,17 @@ export default function LandingPageClient() {
   const landing = searchParams.get("landing");
   const config = configMap[landing] || defaultConfig;
 
+  const utm: Record<string, string> = {};
+  searchParams.forEach((value, key) => {
+    if (key.startsWith("utm_")) {
+      utm[key] = value;
+    }
+  });
+
   return (
     <>
       <main>
-        <HeroSectionV2 config={config} />
+        <HeroSectionV2 config={config} utm={utm} />
         <HowItWorksSection />
         <ComparisonSection />
         <ExamplesSection />
@@ -50,6 +57,7 @@ export default function LandingPageClient() {
           subtitle={config.ctaSubtitle}
           buttonText={config.ctaButton}
           placeholder={config.placeholder}
+          utm={utm}
         />
       </main>
       <Footer />

@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       throw new Error("OPENAI_API_KEY is not configured")
     }
 
-    const { messages, sessionId } = await req.json()
+    const { messages, sessionId, utm } = await req.json()
 
     if (!Array.isArray(messages)) {
       return NextResponse.json(
@@ -76,6 +76,7 @@ export async function POST(req: Request) {
             id: newSessionId,
             initial_message: messages[0].content,
             created_at: new Date().toISOString(),
+            utm: utm || null,
           },
         ]);
       if (sessionError) {
