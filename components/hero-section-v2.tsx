@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ChatDialog } from "@/components/chat-dialog";
 import type { LandingConfig } from "@/lib/landingConfigs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { reachGoal } from "@/lib/ym";
 
 interface HeroSectionV2Props {
   config: LandingConfig & {exampleImages?: string[]; exampleImagesDir?: string };
@@ -58,9 +59,7 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
     if (!input.trim()) return;
 
     // Яндекс.Метрика — цель "start_dialog"
-    if (typeof window !== "undefined" && (window as any).ym) {
-      (window as any).ym(102501372, "reachGoal", "start_dialog");
-    }
+    reachGoal("start_dialog");
 
     setIsChatOpen(true);
   };

@@ -20,7 +20,6 @@ import { AboutSection } from "@/components/about-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { CTASection } from "@/components/cta-section";
-import HeroSectionV2 from "@/components/hero-section-v2";
 
 const configMap = {
   "no-contact": noContactConfig,
@@ -33,7 +32,7 @@ const configMap = {
 export default function LandingPageClient() {
   const searchParams = useSearchParams();
   const landing = searchParams.get("landing");
-  const config = configMap[landing] || defaultConfig;
+  const config = configMap[landing as keyof typeof configMap] || defaultConfig;
 
   const utm: Record<string, string> = {};
   searchParams.forEach((value, key) => {
@@ -45,7 +44,7 @@ export default function LandingPageClient() {
   return (
     <>
       <main>
-        <HeroSectionV2 config={config} utm={utm} />
+        <HeroSection config={config} utm={utm} />
         <HowItWorksSection />
         <ComparisonSection />
         <ExamplesSection />

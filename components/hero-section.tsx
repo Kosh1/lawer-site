@@ -9,15 +9,15 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Clock, DollarSign, Users } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { ChatDialog } from "@/components/chat-dialog"
+import { reachGoal } from "@/lib/ym";
+import type { LandingConfig } from "@/lib/landingConfigs";
 
 interface HeroSectionProps {
-  title: string
-  subtitle: string
-  topText: string
-  placeholder: string
+  config: LandingConfig;
+  utm?: Record<string, string>;
 }
 
-export function HeroSection({ title, subtitle, topText, placeholder }: HeroSectionProps) {
+export function HeroSection({ config, utm }: HeroSectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [documentsCount, setDocumentsCount] = useState(0)
@@ -53,9 +53,7 @@ export function HeroSection({ title, subtitle, topText, placeholder }: HeroSecti
     if (!situation.trim()) return
 
     // Яндекс.Метрика — цель "start_dialog"
-    if (typeof window !== "undefined" && (window as any).ym) {
-      (window as any).ym(102501372, "reachGoal", "start_dialog");
-    }
+    reachGoal("start_dialog");
 
     setIsLoading(true)
     // Открываем чат вместо имитации API запроса
@@ -74,14 +72,14 @@ export function HeroSection({ title, subtitle, topText, placeholder }: HeroSecti
           <div className="text-center mb-12">
             <div className="mb-6 inline-block">
               <p className="rounded-full bg-indigo-500 px-5 py-2 text-white text-base shadow-md">
-                {topText}
+                {config.topText}
               </p>
             </div>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent leading-tight">
-              {title}
+              {config.title}
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              {subtitle}
+              {config.subtitle}
             </p>
           </div>
 
@@ -102,9 +100,14 @@ export function HeroSection({ title, subtitle, topText, placeholder }: HeroSecti
                     id="situation"
                     value={situation}
                     onChange={(e) => setSituation(e.target.value)}
-                    placeholder={placeholder}
+                    placeholder={config.placeholder}
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
+                    onFocus={() => {
+                      if (typeof window !== "undefined" && (window as any).ym) {
+                        (window as any).ym(102501372, "reachGoal", "focus_message_input");
+                      }
+                    }}
                   />
                 </div>
 
@@ -117,7 +120,7 @@ export function HeroSection({ title, subtitle, topText, placeholder }: HeroSecti
                     {isLoading ? "Открываем чат..." : (
                       <span className="flex items-center justify-center">
                         <span role="img" aria-label="rocket" className="mr-2">🚀</span>
-                        ПОЛУЧИТЬ ПЛАН ЗАЩИТЫ ПРАВ
+                        {config.ctaButton || "ПОЛУЧИТЬ ПЛАН ЗАЩИТЫ ПРАВ"}
                       </span>
                     )}
                   </Button>

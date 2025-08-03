@@ -47,9 +47,7 @@ export default function LandingPageClient() {
       <Header />
       <main>
         <HeroSection
-          title={config.title}
-          subtitle={config.subtitle}
-          topText={config.topText}
+          config={config}
         />
         <HowItWorksSection />
         <ComparisonSection />
