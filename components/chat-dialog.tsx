@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { trackPaymentOffer, trackShowPayLink, trackClickPayLink } from "@/lib/analytics"
 
 // Компонент для отображения сообщений с автоматическим отслеживанием
@@ -53,6 +54,7 @@ function ChatMessage({ content, isAssistant }: { content: string; isAssistant: b
             );
           },
         }}
+        remarkPlugins={[remarkGfm]}
       >
         {content}
       </ReactMarkdown>
