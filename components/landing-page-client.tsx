@@ -44,7 +44,7 @@ export default function LandingPageClient() {
   return (
     <>
       <main>
-        <HeroSection config={config} utm={utm} />
+        <HeroSection config={config} utm={utm} landingType={landing || undefined} />
         <HowItWorksSection />
         <ComparisonSection />
         <ExamplesSection />
@@ -57,6 +57,7 @@ export default function LandingPageClient() {
           buttonText={config.ctaButton}
           placeholder={config.placeholder}
           utm={utm}
+          landingType={landing || undefined}
         />
       </main>
       <Footer />

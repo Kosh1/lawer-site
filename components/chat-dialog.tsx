@@ -6,7 +6,59 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Send, User, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from "react-markdown"
+import { trackPaymentOffer, trackShowPayLink, trackClickPayLink } from "@/lib/analytics"
+
+// Компонент для отображения сообщений с автоматическим отслеживанием
+function ChatMessage({ content, isAssistant }: { content: string; isAssistant: boolean }) {
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  // Отслеживаем показ предложения оплаты
+  useEffect(() => {
+    if (isAssistant && messageRef.current) {
+      const hasPaymentOffer = content.includes('подборка') && content.includes('100 рублей');
+      if (hasPaymentOffer) {
+        trackPaymentOffer();
+      }
+    }
+  }, [content, isAssistant]);
+
+  return (
+    <div ref={messageRef}>
+      <ReactMarkdown
+        components={{
+          a: ({node, ...props}) => {
+            // Отправка события в Яндекс.Метрику при показе ссылки на /pay
+            useEffect(() => {
+              if (typeof props.href === 'string' && props.href.includes('/pay')) {
+                trackShowPayLink();
+              }
+            }, [props.href]);
+
+            const handleClick = (e: React.MouseEvent) => {
+              // Отправка события в Яндекс.Метрику при клике на ссылку оплаты
+              if (typeof props.href === 'string' && props.href.includes('/pay')) {
+                trackClickPayLink();
+              }
+            };
+
+            return (
+              <a
+                {...props}
+                className="text-blue-600 underline hover:text-blue-800 transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleClick}
+              />
+            );
+          },
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
+}
 
 interface Message {
   role: "user" | "assistant"
@@ -18,9 +70,10 @@ interface ChatDialogProps {
   onClose: () => void
   initialMessage?: string
   utm?: Record<string, string>
+  landingType?: string
 }
 
-export function ChatDialog({ isOpen, onClose, initialMessage, utm }: ChatDialogProps) {
+export function ChatDialog({ isOpen, onClose, initialMessage, utm, landingType }: ChatDialogProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -63,9 +116,15 @@ export function ChatDialog({ isOpen, onClose, initialMessage, utm }: ChatDialogP
         messages: [...messages, newMessage],
         sessionId: sessionId
       };
-      // Если сессии нет, добавляем utm
-      if (!sessionId && utm) {
-        body.utm = utm;
+      // Если сессии нет, добавляем utm и тип лендинга
+      if (!sessionId) {
+        if (utm) {
+          body.utm = utm;
+        }
+      }
+      // Всегда передаем тип лендинга, если он есть
+      if (landingType) {
+        body.landingType = landingType;
       }
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -138,33 +197,10 @@ export function ChatDialog({ isOpen, onClose, initialMessage, utm }: ChatDialogP
                   {message.role === "user" ? "Вы" : "Юридический ассистент"}
                 </div>
                 <div className="text-gray-700 whitespace-pre-wrap">
-                  <ReactMarkdown
-                    components={{
-                      a: ({node, ...props}) => {
-                        // Отправка события в Яндекс.Метрику при показе ссылки на /pay
-                        useEffect(() => {
-                          if (
-                            typeof window !== 'undefined' &&
-                            (window as any).ym &&
-                            typeof props.href === 'string' &&
-                            props.href.includes('/pay')
-                          ) {
-                            (window as any).ym(102501372, 'reachGoal', 'show_pay_link');
-                          }
-                        }, [props.href]);
-                        return (
-                          <a
-                            {...props}
-                            className="text-blue-600 underline hover:text-blue-800 transition-colors"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          />
-                        );
-                      },
-                    }}
-                  >
-                    {message.content}
-                  </ReactMarkdown>
+                  <ChatMessage 
+                    content={message.content} 
+                    isAssistant={message.role === "assistant"}
+                  />
                 </div>
               </div>
             </div>

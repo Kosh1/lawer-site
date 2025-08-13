@@ -10,14 +10,16 @@ import { CheckCircle, Clock, DollarSign, Users } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { ChatDialog } from "@/components/chat-dialog"
 import { reachGoal } from "@/lib/ym";
+import { trackFocusMessageInput } from "@/lib/analytics";
 import type { LandingConfig } from "@/lib/landingConfigs";
 
 interface HeroSectionProps {
   config: LandingConfig;
   utm?: Record<string, string>;
+  landingType?: string;
 }
 
-export function HeroSection({ config, utm }: HeroSectionProps) {
+export function HeroSection({ config, utm, landingType }: HeroSectionProps) {
   const [situation, setSituation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [documentsCount, setDocumentsCount] = useState(0)
@@ -104,9 +106,7 @@ export function HeroSection({ config, utm }: HeroSectionProps) {
                     className="min-h-[120px] text-base resize-none border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl bg-white text-gray-900 outline-none"
                     required
                     onFocus={() => {
-                      if (typeof window !== "undefined" && (window as any).ym) {
-                        (window as any).ym(102501372, "reachGoal", "focus_message_input");
-                      }
+                      trackFocusMessageInput();
                     }}
                   />
                 </div>
@@ -168,6 +168,8 @@ export function HeroSection({ config, utm }: HeroSectionProps) {
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
         initialMessage={situation}
+        utm={utm}
+        landingType={landingType}
       />
     </>
   )

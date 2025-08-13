@@ -9,9 +9,11 @@ import { reachGoal } from "@/lib/ym";
 
 interface HeroSectionV2Props {
   config: LandingConfig & {exampleImages?: string[]; exampleImagesDir?: string };
+  utm?: Record<string, string>;
+  landingType?: string;
 }
 
-export default function HeroSectionV2({ config }: HeroSectionV2Props) {
+export default function HeroSectionV2({ config, utm, landingType }: HeroSectionV2Props) {
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -211,6 +213,8 @@ export default function HeroSectionV2({ config }: HeroSectionV2Props) {
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
         initialMessage={input}
+        utm={utm}
+        landingType={landingType}
       />
     </section>
   );

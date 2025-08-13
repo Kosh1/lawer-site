@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { OpenAI } from 'openai'
-import { LAWYER_PROMPT } from '@/lib/prompts'
+import { getLawyerPrompt } from '@/lib/prompts'
 import { supabase } from '@/lib/supabase'
 import { v4 as uuidv4 } from 'uuid'
 import { cookies } from 'next/headers'
@@ -28,13 +28,30 @@ export async function POST(req: Request) {
       throw new Error("OPENAI_API_KEY is not configured")
     }
 
-    const { messages, sessionId, utm } = await req.json()
+    const { messages, sessionId, utm, landingType: requestLandingType } = await req.json()
 
     if (!Array.isArray(messages)) {
       return NextResponse.json(
         { error: 'Messages must be an array' },
         { status: 400 }
       )
+    }
+
+    // Определяем тип лендинга
+    let landingType: string | undefined = requestLandingType;
+    
+    // Если не передан напрямую, пытаемся определить из UTM параметров
+    if (!landingType && utm?.utm_source) {
+      if (utm.utm_source.includes('no-contact')) landingType = 'no-contact';
+      else if (utm.utm_source.includes('deprive-rights')) landingType = 'deprive-rights';
+      else if (utm.utm_source.includes('increase-alimony')) landingType = 'increase-alimony';
+      else if (utm.utm_source.includes('divorce')) landingType = 'divorce';
+      else if (utm.utm_source.includes('property-split')) landingType = 'property-split';
+    }
+    
+    // Также проверяем UTM landing_type
+    if (!landingType && utm?.landing_type) {
+      landingType = utm.landing_type;
     }
 
     // --- Описание функции для function calling ---
@@ -52,9 +69,12 @@ export async function POST(req: Request) {
       }
     ];
 
+    // Получаем подходящий промпт в зависимости от типа лендинга
+    const lawyerPrompt = getLawyerPrompt(landingType);
+
     // Форматируем сообщения для OpenAI
     const formattedMessages = [
-      { role: "system", content: LAWYER_PROMPT },
+      { role: "system", content: lawyerPrompt },
       ...messages
     ];
 
